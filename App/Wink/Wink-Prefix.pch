@@ -1,0 +1,132 @@
+//
+//  Wink-Prefix.pch
+//  Wink
+//
+//  Created by Apple on 15/06/17.
+//  Copyright © 2017 VPN. All rights reserved.
+//
+
+#ifndef Wink_Prefix_pch
+#define Wink_Prefix_pch
+
+@import Foundation;
+@import UIKit;
+
+#import <Photos/Photos.h>
+// Frameworks
+
+#import <CoreLocation/CoreLocation.h>
+#import <StoreKit/StoreKit.h>
+#import <MediaPlayer/MediaPlayer.h>
+#import <AVKit/AVKit.h>
+#import <UserNotifications/UserNotifications.h>
+#import <SVProgressHUD/SVProgressHUD.h>
+#import <AFNetworking/AFNetworking.h>
+#import <AFNetworking/UIImageView+AFNetworking.h>
+#import <UIImage+AFNetworking.h>
+#import <UIButton+AFNetworking.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
+#import <FBSDKCoreKit/FBSDKAccessToken.h>
+#import <FBSDKCoreKit/FBSDKGraphRequest.h>
+#import <FBSDKShareKit/FBSDKAppInviteDialog.h>
+#import <CocoaLumberjack/CocoaLumberjack.h>
+#import <AGEmojiKeyboard/AGEmojiKeyBoardView.h>
+#import <AddressBook/AddressBook.h>
+#import <Contacts/Contacts.h>
+#import <Social/Social.h>
+#import <GoogleMobileAds/GoogleMobileAds.h>
+
+// Models
+#import "WinkGlobal.h"
+#import "WinkUtil.h"
+#import "WinkText.h"
+#import "WinkReachability.h"
+#import "WinkUser.h"
+#import "WinkFriend.h"
+#import "WinkPhotos.h"
+#import "WinkGift.h"
+#import "WinkNotification.h"
+#import "WinkComment.h"
+#import "WinkChat.h"
+
+//Libraries
+#import "ZWTTextboxToolbarHandler.h"
+#import "ZWTValidation.h"
+#import "UITextField+ZWTValidation.h"
+#import "UIView+CGRectUtils.h"
+#import "RPFloatingPlaceholderTextField.h"
+#import "RPFloatingPlaceholderTextView.h"
+#import "BSDropDown.h"
+#import "UIImage+Utils.h"
+#import "Constantvalues.h"
+#import "SPH_PARAM_List.h"
+#import "SPHTextBubbleCell.h"
+#import "SPHMediaBubbleCell.h"
+#import "CCTextFieldEffects.h"
+#import "PSProfileStepper.h"
+
+//Network
+#import "WinkWebservice.h"
+#import "WinkWebservice+User.h"
+#import "WinkWebservice+AppSetting.h"
+#import "WinkWebservice+Chat.h"
+
+//Views
+#import "WinkMessageBar.h"
+#import "MenuCell.h"
+#import "FriendsCollectionCell.h"
+#import "ProfileLikeCell.h"
+#import "OptionTableViewCell.h"
+
+#import "AppDelegate.h"
+
+//View Controllers
+#import "WinkViewController.h"
+#import "ContainerViewController.h"
+#import "LoginViewController.h"
+#import "SignUpViewController.h"
+
+#import "RootSignupViewController.h"
+#import "ForgotPasswordViewController.h"
+#import "SideBarViewController.h"
+#import "MessageViewController.h"
+#import "ProfileViewController.h"
+#import "FriendsViewController.h"
+#import "MyGallaryViewController.h"
+#import "ProfileLikesViewController.h"
+#import "EditProfileViewController.h"
+#import "PeopleOfTheDayViewController.h"
+#import "FriendProfileViewController.h"
+#import "WinkStreamViewController.h"
+#import "ProfileGuestViewController.h"
+#import "ILikedViewController.h"
+#import "ProfileGiftsViewController.h"
+#import "GallaryIteamViewController.h"
+#import "NotificationListViewController.h"
+#import "PeopleNearbyViewController.h"
+#import "FindFriendViewController.h"
+#import "SearchSettingViewController.h"
+#import "AppSettingViewController.h"
+#import "PushNotificationSettingsViewController.h"
+#import "ChangePasswordViewController.h"
+#import "DeactiveAccountViewController.h"
+#import "BlockedListViewController.h"
+#import "ContactUsViewController.h"
+#import "InviteFriendViewController.h"
+#import "ChatViewController.h"
+#import "TermsNConditionViewController.h"
+#import "UpgradesViewController.h"
+#import "BuyCreditViewController.h"
+#import "ChooseGiftViewController.h"
+#import "SendGiftViewController.h"
+#import "UploadGallaryIteamViewController.h"
+#import "AcknowledgementViewController.h"
+#import "FameViewController.h"
+#import "ConnectWithFBViewController.h"
+#import "CashOutViewController.h"
+
+//PopupViewController
+#import "DatePickerViewController.h"
+#import "SettingOptionViewController.h"
+
+#endif /* Wink_Prefix_pch */

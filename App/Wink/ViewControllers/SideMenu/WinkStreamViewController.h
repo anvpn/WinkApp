@@ -1,0 +1,13 @@
+//
+//  WinkStreamViewController.h
+//  Wink
+//
+//  Created by Apple on 03/07/17.
+//  Copyright © 2017 VPN. All rights reserved.
+//
+
+#import "WinkViewController.h"
+
+@interface WinkStreamViewController : WinkViewController
+
+@end

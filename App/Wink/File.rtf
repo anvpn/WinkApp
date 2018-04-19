@@ -1,0 +1,796 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1504\cocoasubrtf830
+{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red92\green38\blue153;\red170\green13\blue145;
+\red63\green110\blue116;\red0\green116\blue0;\red46\green13\blue110;\red100\green56\blue32;\red196\green26\blue22;
+\red28\green0\blue207;\red38\green71\blue75;}
+{\*\expandedcolortbl;;\csgenericrgb\c0\c0\c0;\csgenericrgb\c35900\c14900\c60100;\csgenericrgb\c66500\c5200\c56900;
+\csgenericrgb\c24700\c43100\c45600;\csgenericrgb\c0\c45600\c0;\csgenericrgb\c18100\c5200\c43100;\csgenericrgb\c39100\c22000\c12500;\csgenericrgb\c77000\c10200\c8600;
+\csgenericrgb\c11000\c0\c81000;\csgenericrgb\c14900\c27800\c29400;}
+\margl1440\margr1440\vieww9000\viewh8400\viewkind0
+\deftab692
+\pard\tx692\pardeftab692\pardirnatural\partightenfactor0
+
+\f0\fs28 \cf2 \CocoaLigature0 - (
+\fs22 \cf3 NSString
+\fs28 \cf2  *)senderId\
+\{\
+    
+\fs22 \cf4 return
+\fs28 \cf2  
+\fs22 \cf5 chat
+\fs28 \cf2 .
+\fs22 \cf5 WithUserId
+\fs28 \cf2 ;\
+\}\
+\
+- (
+\fs22 \cf3 NSString
+\fs28 \cf2  *)senderDisplayName\
+\{\
+    
+\fs22 \cf4 return
+\fs28 \cf2  
+\fs22 \cf5 chat
+\fs28 \cf2 .
+\fs22 \cf5 WithUserFullname
+\fs28 \cf2 ;\
+\}\
+\
+- (
+\fs22 \cf4 id
+\fs28 \cf2 <
+\fs22 \cf5 JSQMessageData
+\fs28 \cf2 >)collectionView:(
+\fs22 \cf5 JSQMessagesCollectionView
+\fs28 \cf2  *)collectionView messageDataForItemAtIndexPath:(
+\fs22 \cf3 NSIndexPath
+\fs28 \cf2  *)indexPath\
+\{\
+    
+\fs22 \cf4 return
+\fs28 \cf2  
+\fs22 \cf5 arrMesaagesList
+\fs28 \cf2 [indexPath.
+\fs22 \cf3 row
+\fs28 \cf2 ];\
+\}\
+\
+- (
+\fs22 \cf4 void
+\fs28 \cf2 )collectionView:(
+\fs22 \cf5 JSQMessagesCollectionView
+\fs28 \cf2  *)collectionView didDeleteMessageAtIndexPath:(
+\fs22 \cf3 NSIndexPath
+\fs28 \cf2  *)indexPath\
+\{\
+    
+\fs22 \cf6 //[self.demoData.messages removeObjectAtIndex:indexPath.item];
+\fs28 \cf2 \
+\}\
+\
+- (
+\fs22 \cf4 id
+\fs28 \cf2 <
+\fs22 \cf3 JSQMessageBubbleImageDataSource
+\fs28 \cf2 >)collectionView:(
+\fs22 \cf5 JSQMessagesCollectionView
+\fs28 \cf2  *)collectionView messageBubbleImageDataForItemAtIndexPath:(
+\fs22 \cf3 NSIndexPath
+\fs28 \cf2  *)indexPath\
+\{\
+    
+\fs22 \cf6 /**\
+     *  You may return nil here if you do not want bubbles.\
+     *  In this case, you should set the background color of your collection view cell's textView.\
+     *\
+     *  Otherwise, return your previously created bubble image data objects.\
+     */
+\fs28 \cf2 \
+    \
+    JSQMessagesBubbleImageFactory *bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] init];\
+    \
+    JSQMessagesBubbleImage *outgoingBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor blueColor]];\
+    \
+    JSQMessagesBubbleImage *incomingBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor redColor]];\
+    \
+    
+\fs22 \cf5 JSQMessage
+\fs28 \cf2  *message = [
+\fs22 \cf5 arrMesaagesList
+\fs28 \cf2  
+\fs22 \cf7 objectAtIndex
+\fs28 \cf2 :indexPath.
+\fs22 \cf3 item
+\fs28 \cf2 ];\
+    \
+    
+\fs22 \cf4 if
+\fs28 \cf2  ([message.
+\fs22 \cf5 senderId
+\fs28 \cf2  
+\fs22 \cf7 isEqualToString
+\fs28 \cf2 :
+\fs22 \cf8 WinkGlobalObject
+\fs28 \cf2 .
+\fs22 \cf5 user
+\fs28 \cf2 .
+\fs22 \cf5 ID
+\fs28 \cf2 ])\
+    \{\
+        
+\fs22 \cf4 return
+\fs28 \cf2  outgoingBubbleImageData;\
+    \}\
+    \
+    
+\fs22 \cf4 return
+\fs28 \cf2  incomingBubbleImageData;\
+\}\
+\
+- (
+\fs22 \cf4 id
+\fs28 \cf2 <
+\fs22 \cf3 JSQMessageAvatarImageDataSource
+\fs28 \cf2 >)collectionView:(
+\fs22 \cf5 JSQMessagesCollectionView
+\fs28 \cf2  *)collectionView avatarImageDataForItemAtIndexPath:(
+\fs22 \cf3 NSIndexPath
+\fs28 \cf2  *)indexPath\
+\{\
+    
+\fs22 \cf6 /**\
+     *  Return `nil` here if you do not want avatars.\
+     *  If you do return `nil`, be sure to do the following in `viewDidLoad`:\
+     *\
+     *  self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;\
+     *  self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;\
+     *\
+     *  It is possible to have only outgoing avatars or only incoming avatars, too.\
+     */
+\fs28 \cf2 \
+    \
+    
+\fs22 \cf6 /**\
+     *  Return your previously created avatar image data objects.\
+     *\
+     *  Note: these the avatars will be sized according to these values:\
+     *\
+     *  self.collectionView.collectionViewLayout.incomingAvatarViewSize\
+     *  self.collectionView.collectionViewLayout.outgoingAvatarViewSize\
+     *\
+     *  Override the defaults in `viewDidLoad`\
+     */
+\fs28 \cf2 \
+    
+\fs22 \cf5 JSQMessage
+\fs28 \cf2  *message = [
+\fs22 \cf5 arrMesaagesList
+\fs28 \cf2  
+\fs22 \cf7 objectAtIndex
+\fs28 \cf2 :indexPath.
+\fs22 \cf3 item
+\fs28 \cf2 ];\
+    
+\fs22 \cf6 //NSUInteger diameter = 30.0;
+\fs28 \cf2 \
+    \
+    \
+    \
+    JSQMessagesAvatarImage *cookImage = [JSQMessagesAvatarImageFactory avatarImageWithImage:[UIImage imageNamed:
+\fs22 \cf9 @""
+\fs28 \cf2 ] diameter:
+\fs22 \cf10 30.0
+\fs28 \cf2 ];\
+    \
+    \
+    
+\fs22 \cf4 if
+\fs28 \cf2  ([message.
+\fs22 \cf5 senderId
+\fs28 \cf2  
+\fs22 \cf7 isEqualToString
+\fs28 \cf2 :
+\fs22 \cf8 WinkGlobalObject
+\fs28 \cf2 .
+\fs22 \cf5 user
+\fs28 \cf2 .
+\fs22 \cf5 ID
+\fs28 \cf2 ])\
+        \
+    \{\
+        
+\fs22 \cf4 return
+\fs28 \cf2  cookImage;\
+    \}\
+    
+\fs22 \cf4 else
+\fs28 \cf2 \
+    \{\
+        
+\fs22 \cf4 return
+\fs28 \cf2  cookImage;\
+    \}\
+    \
+\}\
+\
+- (
+\fs22 \cf3 NSAttributedString
+\fs28 \cf2  *)collectionView:(
+\fs22 \cf5 JSQMessagesCollectionView
+\fs28 \cf2  *)collectionView attributedTextForCellTopLabelAtIndexPath:(
+\fs22 \cf3 NSIndexPath
+\fs28 \cf2  *)indexPath\
+\{\
+    
+\fs22 \cf6 /**\
+     *  This logic should be consistent with what you return from `heightForCellTopLabelAtIndexPath:`\
+     *  The other label text delegate methods should follow a similar pattern.\
+     *\
+     *  Show a timestamp for every 3rd message\
+     */
+\fs28 \cf2 \
+    
+\fs22 \cf4 if
+\fs28 \cf2  (indexPath.
+\fs22 \cf3 item
+\fs28 \cf2  % 
+\fs22 \cf10 3
+\fs28 \cf2  == 
+\fs22 \cf10 0
+\fs28 \cf2 ) \{\
+        
+\fs22 \cf5 JSQMessage
+\fs28 \cf2  *message = [
+\fs22 \cf5 arrMesaagesList
+\fs28 \cf2  
+\fs22 \cf7 objectAtIndex
+\fs28 \cf2 :indexPath.
+\fs22 \cf3 item
+\fs28 \cf2 ];\
+        
+\fs22 \cf4 return
+\fs28 \cf2  
+\fs22 \cf4 nil
+\fs28 \cf2 ;\
+        
+\fs22 \cf6 //return [[JSQMessagesTimestampFormatter sharedFormatter] attributedTimestampForDate:message.date];
+\fs28 \cf2 \
+    \}\
+    \
+    
+\fs22 \cf4 return
+\fs28 \cf2  
+\fs22 \cf4 nil
+\fs28 \cf2 ;\
+\}\
+\
+- (
+\fs22 \cf3 NSAttributedString
+\fs28 \cf2  *)collectionView:(
+\fs22 \cf5 JSQMessagesCollectionView
+\fs28 \cf2  *)collectionView attributedTextForMessageBubbleTopLabelAtIndexPath:(
+\fs22 \cf3 NSIndexPath
+\fs28 \cf2  *)indexPath\
+\{\
+    
+\fs22 \cf5 JSQMessage
+\fs28 \cf2  *message = [
+\fs22 \cf5 arrMesaagesList
+\fs28 \cf2  
+\fs22 \cf7 objectAtIndex
+\fs28 \cf2 :indexPath.
+\fs22 \cf3 item
+\fs28 \cf2 ];\
+    \
+    
+\fs22 \cf6 /**\
+     *  iOS7-style sender name labels\
+     */
+\fs28 \cf2 \
+    
+\fs22 \cf4 if
+\fs28 \cf2  ([message.
+\fs22 \cf5 senderId
+\fs28 \cf2  
+\fs22 \cf7 isEqualToString
+\fs28 \cf2 :
+\fs22 \cf8 WinkGlobalObject
+\fs28 \cf2 .
+\fs22 \cf5 user
+\fs28 \cf2 .
+\fs22 \cf5 ID
+\fs28 \cf2 ]) \{\
+        
+\fs22 \cf4 return
+\fs28 \cf2  
+\fs22 \cf4 nil
+\fs28 \cf2 ;\
+    \}\
+    \
+    
+\fs22 \cf4 if
+\fs28 \cf2  (indexPath.
+\fs22 \cf3 item
+\fs28 \cf2  - 
+\fs22 \cf10 1
+\fs28 \cf2  > 
+\fs22 \cf10 0
+\fs28 \cf2 ) \{\
+        
+\fs22 \cf5 JSQMessage
+\fs28 \cf2  *previousMessage = [
+\fs22 \cf5 arrMesaagesList
+\fs28 \cf2  
+\fs22 \cf7 objectAtIndex
+\fs28 \cf2 :indexPath.
+\fs22 \cf3 item
+\fs28 \cf2  - 
+\fs22 \cf10 1
+\fs28 \cf2 ];\
+        
+\fs22 \cf4 if
+\fs28 \cf2  ([[previousMessage 
+\fs22 \cf11 senderId
+\fs28 \cf2 ] 
+\fs22 \cf7 isEqualToString
+\fs28 \cf2 :message.
+\fs22 \cf5 senderId
+\fs28 \cf2 ]) \{\
+            
+\fs22 \cf4 return
+\fs28 \cf2  
+\fs22 \cf4 nil
+\fs28 \cf2 ;\
+        \}\
+    \}\
+    \
+    
+\fs22 \cf6 /**\
+     *  Don't specify attributes to use the defaults.\
+     */
+\fs28 \cf2 \
+    
+\fs22 \cf4 return
+\fs28 \cf2  [[
+\fs22 \cf3 NSAttributedString
+\fs28 \cf2  
+\fs22 \cf7 alloc
+\fs28 \cf2 ] 
+\fs22 \cf7 initWithString
+\fs28 \cf2 :message.
+\fs22 \cf5 senderDisplayName
+\fs28 \cf2 ];\
+\}\
+\
+- (
+\fs22 \cf3 NSAttributedString
+\fs28 \cf2  *)collectionView:(
+\fs22 \cf5 JSQMessagesCollectionView
+\fs28 \cf2  *)collectionView attributedTextForCellBottomLabelAtIndexPath:(
+\fs22 \cf3 NSIndexPath
+\fs28 \cf2  *)indexPath\
+\{\
+    
+\fs22 \cf4 return
+\fs28 \cf2  
+\fs22 \cf4 nil
+\fs28 \cf2 ;\
+\}\
+\
+
+\fs22 \cf8 #pragma mark - UICollectionView DataSource\
+
+\fs28 \cf2 \
+- (
+\fs22 \cf3 NSInteger
+\fs28 \cf2 )collectionView:(
+\fs22 \cf3 UICollectionView
+\fs28 \cf2  *)collectionView numberOfItemsInSection:(
+\fs22 \cf3 NSInteger
+\fs28 \cf2 )section\
+\{\
+    
+\fs22 \cf4 return
+\fs28 \cf2  [
+\fs22 \cf5 arrMesaagesList
+\fs28 \cf2  
+\fs22 \cf7 count
+\fs28 \cf2 ];\
+\}\
+\
+- (
+\fs22 \cf3 UICollectionViewCell
+\fs28 \cf2  *)collectionView:(
+\fs22 \cf5 JSQMessagesCollectionView
+\fs28 \cf2  *)collectionView cellForItemAtIndexPath:(
+\fs22 \cf3 NSIndexPath
+\fs28 \cf2  *)indexPath\
+\{\
+    
+\fs22 \cf6 /**\
+     *  Override point for customizing cells\
+     */
+\fs28 \cf2 \
+    
+\fs22 \cf5 JSQMessagesCollectionViewCell
+\fs28 \cf2  *cell = (JSQMessagesCollectionViewCell *)[[
+\fs22 \cf4 super
+\fs28 \cf2  collectionView] cellForItemAtIndexPath:indexPath];\
+    \
+    
+\fs22 \cf6 /**\
+     *  Configure almost *anything* on the cell\
+     *\
+     *  Text colors, label text, label colors, etc.\
+     *\
+     *\
+     *  DO NOT set `cell.textView.font` !\
+     *  Instead, you need to set `self.collectionView.collectionViewLayout.messageBubbleFont` to the font you want in `viewDidLoad`\
+     *\
+     *\
+     *  DO NOT manipulate cell layout information!\
+     *  Instead, override the properties you want on `self.collectionView.collectionViewLayout` from `viewDidLoad`\
+     */
+\fs28 \cf2 \
+    \
+    
+\fs22 \cf5 JSQMessage
+\fs28 \cf2  *msg = [
+\fs22 \cf5 arrMesaagesList
+\fs28 \cf2  
+\fs22 \cf7 objectAtIndex
+\fs28 \cf2 :indexPath.
+\fs22 \cf3 item
+\fs28 \cf2 ];\
+    \
+    
+\fs22 \cf4 if
+\fs28 \cf2  (!msg.
+\fs22 \cf5 isMediaMessage
+\fs28 \cf2 ) \{\
+        \
+        
+\fs22 \cf4 if
+\fs28 \cf2  ([msg.
+\fs22 \cf5 senderId
+\fs28 \cf2  
+\fs22 \cf7 isEqualToString
+\fs28 \cf2 :
+\fs22 \cf8 WinkGlobalObject
+\fs28 \cf2 .
+\fs22 \cf5 user
+\fs28 \cf2 .
+\fs22 \cf5 ID
+\fs28 \cf2 ]) \{\
+            cell.
+\fs22 \cf5 textView
+\fs28 \cf2 .
+\fs22 \cf3 textColor
+\fs28 \cf2  = [
+\fs22 \cf3 UIColor
+\fs28 \cf2  
+\fs22 \cf7 blackColor
+\fs28 \cf2 ];\
+        \}\
+        
+\fs22 \cf4 else
+\fs28 \cf2  \{\
+            cell.
+\fs22 \cf5 textView
+\fs28 \cf2 .
+\fs22 \cf3 textColor
+\fs28 \cf2  = [
+\fs22 \cf3 UIColor
+\fs28 \cf2  
+\fs22 \cf7 whiteColor
+\fs28 \cf2 ];\
+        \}\
+        \
+       
+\fs22 \cf6 /* cell.textView.linkTextAttributes = @\{ NSForegroundColorAttributeName : cell.textView.textColor,\
+                                              NSUnderlineStyleAttributeName : @(NSUnderlineStyleSingle | NSUnderlinePatternSolid) \};*/
+\fs28 \cf2 \
+        \
+    \}\
+    \
+   
+\fs22 \cf6 // cell.accessoryButton.hidden = !YES;
+\fs28 \cf2 \
+    \
+    
+\fs22 \cf4 return
+\fs28 \cf2  cell;\
+\}\
+\
+- (
+\fs22 \cf4 BOOL
+\fs28 \cf2 )shouldShowAccessoryButtonForMessage:(
+\fs22 \cf4 id
+\fs28 \cf2 <
+\fs22 \cf5 JSQMessageData
+\fs28 \cf2 >)message\
+\{\
+    
+\fs22 \cf4 return
+\fs28 \cf2  
+\fs22 \cf4 YES
+\fs28 \cf2 ;\
+    
+\fs22 \cf6 //return ([message isMediaMessage] && [NSUserDefaults accessoryButtonForMediaMessages]);
+\fs28 \cf2 \
+\}\
+
+\fs22 \cf8 #pragma mark - JSQMessages collection view flow layout delegate\
+
+\fs28 \cf2 \
+
+\fs22 \cf8 #pragma mark - Adjusting cell label heights\
+
+\fs28 \cf2 \
+- (
+\fs22 \cf3 CGFloat
+\fs28 \cf2 )collectionView:(
+\fs22 \cf5 JSQMessagesCollectionView
+\fs28 \cf2  *)collectionView\
+                   layout:(
+\fs22 \cf5 JSQMessagesCollectionViewFlowLayout
+\fs28 \cf2  *)collectionViewLayout heightForCellTopLabelAtIndexPath:(
+\fs22 \cf3 NSIndexPath
+\fs28 \cf2  *)indexPath\
+\{\
+    
+\fs22 \cf6 /**\
+     *  Each label in a cell has a `height` delegate method that corresponds to its text dataSource method\
+     */
+\fs28 \cf2 \
+    \
+    
+\fs22 \cf6 /**\
+     *  This logic should be consistent with what you return from `attributedTextForCellTopLabelAtIndexPath:`\
+     *  The other label height delegate methods should follow similarly\
+     *\
+     *  Show a timestamp for every 3rd message\
+     */
+\fs28 \cf2 \
+    
+\fs22 \cf4 if
+\fs28 \cf2  (indexPath.
+\fs22 \cf3 item
+\fs28 \cf2  % 
+\fs22 \cf10 3
+\fs28 \cf2  == 
+\fs22 \cf10 0
+\fs28 \cf2 ) \{\
+        
+\fs22 \cf4 return
+\fs28 \cf2  
+\fs22 \cf5 kJSQMessagesCollectionViewCellLabelHeightDefault
+\fs28 \cf2 ;\
+    \}\
+    \
+    
+\fs22 \cf4 return
+\fs28 \cf2  
+\fs22 \cf10 0.0f
+\fs28 \cf2 ;\
+\}\
+\
+- (
+\fs22 \cf3 CGFloat
+\fs28 \cf2 )collectionView:(
+\fs22 \cf5 JSQMessagesCollectionView
+\fs28 \cf2  *)collectionView\
+                   layout:(
+\fs22 \cf5 JSQMessagesCollectionViewFlowLayout
+\fs28 \cf2  *)collectionViewLayout heightForMessageBubbleTopLabelAtIndexPath:(
+\fs22 \cf3 NSIndexPath
+\fs28 \cf2  *)indexPath\
+\{\
+    
+\fs22 \cf6 /**\
+     *  iOS7-style sender name labels\
+     */
+\fs28 \cf2 \
+    
+\fs22 \cf5 JSQMessage
+\fs28 \cf2  *currentMessage = [
+\fs22 \cf5 arrMesaagesList
+\fs28 \cf2  
+\fs22 \cf7 objectAtIndex
+\fs28 \cf2 :indexPath.
+\fs22 \cf3 item
+\fs28 \cf2 ];\
+    
+\fs22 \cf4 if
+\fs28 \cf2  ([[currentMessage 
+\fs22 \cf11 senderId
+\fs28 \cf2 ] 
+\fs22 \cf7 isEqualToString
+\fs28 \cf2 :
+\fs22 \cf4 self
+\fs28 \cf2 .
+\fs22 \cf11 senderId
+\fs28 \cf2 ]) \{\
+        
+\fs22 \cf4 return
+\fs28 \cf2  
+\fs22 \cf10 0.0f
+\fs28 \cf2 ;\
+    \}\
+    \
+    
+\fs22 \cf4 if
+\fs28 \cf2  (indexPath.
+\fs22 \cf3 item
+\fs28 \cf2  - 
+\fs22 \cf10 1
+\fs28 \cf2  > 
+\fs22 \cf10 0
+\fs28 \cf2 ) \{\
+        
+\fs22 \cf5 JSQMessage
+\fs28 \cf2  *previousMessage = [
+\fs22 \cf5 arrMesaagesList
+\fs28 \cf2  
+\fs22 \cf7 objectAtIndex
+\fs28 \cf2 :indexPath.
+\fs22 \cf3 item
+\fs28 \cf2  - 
+\fs22 \cf10 1
+\fs28 \cf2 ];\
+        
+\fs22 \cf4 if
+\fs28 \cf2  ([[previousMessage 
+\fs22 \cf11 senderId
+\fs28 \cf2 ] 
+\fs22 \cf7 isEqualToString
+\fs28 \cf2 :[currentMessage 
+\fs22 \cf11 senderId
+\fs28 \cf2 ]]) \{\
+            
+\fs22 \cf4 return
+\fs28 \cf2  
+\fs22 \cf10 0.0f
+\fs28 \cf2 ;\
+        \}\
+    \}\
+    \
+    
+\fs22 \cf4 return
+\fs28 \cf2  
+\fs22 \cf5 kJSQMessagesCollectionViewCellLabelHeightDefault
+\fs28 \cf2 ;\
+\}\
+\
+- (
+\fs22 \cf3 CGFloat
+\fs28 \cf2 )collectionView:(
+\fs22 \cf5 JSQMessagesCollectionView
+\fs28 \cf2  *)collectionView\
+                   layout:(
+\fs22 \cf5 JSQMessagesCollectionViewFlowLayout
+\fs28 \cf2  *)collectionViewLayout heightForCellBottomLabelAtIndexPath:(
+\fs22 \cf3 NSIndexPath
+\fs28 \cf2  *)indexPath\
+\{\
+    
+\fs22 \cf4 return
+\fs28 \cf2  
+\fs22 \cf10 0.0f
+\fs28 \cf2 ;\
+\}\
+\
+
+\fs22 \cf8 #pragma mark - Responding to collection view tap events\
+
+\fs28 \cf2 \
+- (
+\fs22 \cf4 void
+\fs28 \cf2 )collectionView:(
+\fs22 \cf5 JSQMessagesCollectionView
+\fs28 \cf2  *)collectionView\
+                header:(
+\fs22 \cf3 JSQMessagesLoadEarlierHeaderView
+\fs28 \cf2  *)headerView didTapLoadEarlierMessagesButton:(
+\fs22 \cf3 UIButton
+\fs28 \cf2  *)sender\
+\{\
+    
+\fs22 \cf8 NSLog
+\fs28 \cf2 (
+\fs22 \cf9 @"Load earlier messages!"
+\fs28 \cf2 );\
+\}\
+\
+- (
+\fs22 \cf4 void
+\fs28 \cf2 )collectionView:(
+\fs22 \cf5 JSQMessagesCollectionView
+\fs28 \cf2  *)collectionView didTapAvatarImageView:(
+\fs22 \cf3 UIImageView
+\fs28 \cf2  *)avatarImageView atIndexPath:(
+\fs22 \cf3 NSIndexPath
+\fs28 \cf2  *)indexPath\
+\{\
+    
+\fs22 \cf8 NSLog
+\fs28 \cf2 (
+\fs22 \cf9 @"Tapped avatar!"
+\fs28 \cf2 );\
+\}\
+\
+- (
+\fs22 \cf4 void
+\fs28 \cf2 )collectionView:(
+\fs22 \cf5 JSQMessagesCollectionView
+\fs28 \cf2  *)collectionView didTapMessageBubbleAtIndexPath:(
+\fs22 \cf3 NSIndexPath
+\fs28 \cf2  *)indexPath\
+\{\
+    
+\fs22 \cf8 NSLog
+\fs28 \cf2 (
+\fs22 \cf9 @"Tapped message bubble!"
+\fs28 \cf2 );\
+\}\
+\
+- (
+\fs22 \cf4 void
+\fs28 \cf2 )collectionView:(
+\fs22 \cf5 JSQMessagesCollectionView
+\fs28 \cf2  *)collectionView didTapCellAtIndexPath:(
+\fs22 \cf3 NSIndexPath
+\fs28 \cf2  *)indexPath touchLocation:(
+\fs22 \cf3 CGPoint
+\fs28 \cf2 )touchLocation\
+\{\
+    
+\fs22 \cf8 NSLog
+\fs28 \cf2 (
+\fs22 \cf9 @"Tapped cell at %@!"
+\fs28 \cf2 , 
+\fs22 \cf7 NSStringFromCGPoint
+\fs28 \cf2 (touchLocation));\
+\}\
+\
+
+\fs22 \cf8 #pragma mark - JSQMessagesComposerTextViewPasteDelegate methods\
+
+\fs28 \cf2 \
+
+\fs22 \cf6 /*- (BOOL)composerTextView:(JSQMessagesComposerTextView *)textView shouldPasteWithSender:(id)sender\
+\{\
+    if ([UIPasteboard generalPasteboard].image) \{\
+        // If there's an image in the pasteboard, construct a media item with that image and `send` it.\
+        JSQPhotoMediaItem *item = [[JSQPhotoMediaItem alloc] initWithImage:[UIPasteboard generalPasteboard].image];\
+        JSQMessage *message = [[JSQMessage alloc] initWithSenderId:self.senderId\
+                                                 senderDisplayName:self.senderDisplayName\
+                                                              date:[NSDate date]\
+                                                             media:item];\
+        [self.demoData.messages addObject:message];\
+        [self finishSendingMessage];\
+        return NO;\
+    \}\
+    return YES;\
+\}\
+*/
+\fs28 \cf2 \
+
+\fs22 \cf8 #pragma mark - JSQMessagesViewAccessoryDelegate methods\
+
+\fs28 \cf2 \
+- (
+\fs22 \cf4 void
+\fs28 \cf2 )messageView:(
+\fs22 \cf5 JSQMessagesCollectionView
+\fs28 \cf2  *)view didTapAccessoryButtonAtIndexPath:(
+\fs22 \cf3 NSIndexPath
+\fs28 \cf2  *)path\
+\{\
+    
+\fs22 \cf8 NSLog
+\fs28 \cf2 (
+\fs22 \cf9 @"Tapped accessory button!"
+\fs28 \cf2 );\
+\}\
+}
