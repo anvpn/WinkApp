@@ -134,16 +134,27 @@
 
 - (void)keyboardWillAppear:(NSNotification *)notification
 {
+//    NSDictionary *userInfo = [notification userInfo];
+//    CGSize keyboardSize = [[userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+//
+//    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.height, 0.0);
+//    [tblvChat setContentInset:contentInsets];
+//    [self scrollTableview];
+//
+//    CGRect messageFrame = vwTextInput.frame;
+//    messageFrame.origin.y -= keyboardSize.height;
+//    [vwTextInput setFrame:messageFrame];
+    
     NSDictionary *userInfo = [notification userInfo];
     CGSize keyboardSize = [[userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.height, 0.0);
-    [tblvChat setContentInset:contentInsets];
-    [self scrollTableview];
-    
     CGRect messageFrame = vwTextInput.frame;
     messageFrame.origin.y -= keyboardSize.height;
-    [vwTextInput setFrame:messageFrame];
+    
+    CGRect rect = CGRectMake(0, [UIScreen mainScreen].bounds.size.height -(keyboardSize.height + vwTextInput.frame.size.height + 40), [UIScreen mainScreen].bounds.size.width, vwTextInput.frame.size.height);
+    
+    [vwTextInput setFrame:rect];
+    
 }
 - (void)keyboardWillDisappear:(NSNotification *)notification
 {

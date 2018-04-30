@@ -35,6 +35,8 @@
 #import <Contacts/Contacts.h>
 #import <Social/Social.h>
 #import <GoogleMobileAds/GoogleMobileAds.h>
+#import "UIImageView+WebCache.h"
+#import "UIButton+WebCache.h"
 
 // Models
 #import "WinkGlobal.h"

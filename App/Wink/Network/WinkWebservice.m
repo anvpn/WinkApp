@@ -10,6 +10,8 @@
 
 //#define BasePath @"http://www.winkandroid.com/"
 #define BasePath @"http://winkfreedating.com/"
+//#define BasePath @"http://wink.vpninfotech.com/"
+
 #define BaseFilePath BasePath @"api/"
 
 NSString *const BaseAPIPath = BaseFilePath @"v3/method";

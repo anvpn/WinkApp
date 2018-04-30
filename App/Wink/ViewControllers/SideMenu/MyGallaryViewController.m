@@ -212,7 +212,7 @@
 //}
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(self.view.frame.size.width / 2.2, clvFriends.layer.frame.size.height/3.2);
+    return CGSizeMake(([UIScreen mainScreen].bounds.size.width - 20)/2, ([UIScreen mainScreen].bounds.size.width - 20)/2);
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath

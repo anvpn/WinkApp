@@ -14,7 +14,8 @@
 @property int profileId;
 @property (strong,nonatomic) NSDictionary * dictFriend;
 @property (strong,nonatomic) WinkUser * winkUser;
-
+@property (strong,nonatomic) UIImage * imgProfile;
+@property BOOL isAllowFurtherNavigations;
 
 
 @end

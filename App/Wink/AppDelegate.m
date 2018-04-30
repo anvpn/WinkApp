@@ -240,7 +240,8 @@
     
     if(WinkGlobalObject.user.ID != nil)
     {
-        [self sendLocationToServer];
+        //ana commented
+//        [self sendLocationToServer];
     }
     
     

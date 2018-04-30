@@ -7,6 +7,7 @@
 //
 
 #import "ProfileGuestViewController.h"
+#import "WinkGuestUser.h"
 
 @interface ProfileGuestViewController ()<UICollectionViewDataSource, UICollectionViewDelegate>
 @property (weak, nonatomic) IBOutlet UICollectionView *clcvGuest;
@@ -187,8 +188,17 @@
     {
         lastComponent = [url lastPathComponent];
         photourl = [WinkWebservice URLForProfileImage:lastComponent];
-        //[cell.imgvProfilePic setImageWithURL:photourl];
-        [cell.imgvProfilePic setImageWithURL:photourl placeholderImage:[UIImage imageNamed:@"profile_default_photo.png"]];
+//        [cell.imgvProfilePic setImageWithURL:photourl];
+//        [cell.imgvProfilePic setImageWithURL:photourl placeholderImage:[UIImage imageNamed:@"profile_default_photo.png"]];
+//
+    
+        [cell.imgvProfilePic sd_setImageWithURL:photourl placeholderImage:[UIImage imageNamed:@"profile_default_photo.png"] options:SDWebImageRefreshCached];
+        
+        
+    }
+    else
+    {
+        cell.imgvProfilePic.image = [UIImage imageNamed:@"profile_default_photo.png"];
     }
     
     cell.layer.masksToBounds = YES;
@@ -202,17 +212,24 @@
     NSDictionary *frnd = arrGuestList[indexPath.row];
     
     FriendProfileViewController *fvc = [WinkGlobalObject.storyboardMenubar instantiateViewControllerWithIdentifier:@"FriendProfileViewController"];
-    
-    WinkUser *user = [[WinkUser alloc]init];
-    user.userName = frnd[@"guestUserUsername"];
-    user.name = frnd[@"guestUserFullname"];
-    user.isOnline = [frnd[@"guestUserOnline"] intValue];
-    user.ID = frnd[@"guestUserId"];
-    user.verify = [frnd[@"guestUserVerify"] boolValue];
-    user.isVIP = [frnd[@"guestUserVip"] boolValue];
-    user.createdDate = frnd[@"date"];
-    user.isBlocked = [frnd[@"blocked"] boolValue];
+    WinkGuestUser *userGuest = [[WinkGuestUser alloc]initWithDictionary:frnd];
 
+    WinkUser *user = [[WinkUser alloc]init];
+    user.userName = userGuest.guestUserUsername;
+    user.name = userGuest.guestUserFullname;
+    user.isOnline = userGuest.guestUserOnline;
+    user.ID = userGuest.guestUserId;
+    user.verify = userGuest.guestUserVerify;
+    user.isVIP = userGuest.guestUserVip;
+    user.createdDate = userGuest.createAt;
+    user.isBlocked = userGuest.blocked;
+    user.name = userGuest.guestUserFullname;
+    user.normalSizeProfURL = [NSURL URLWithString:userGuest.guestUserPhoto];
+
+    
+    FriendsCollectionCell *cell = (FriendsCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    fvc.imgProfile = cell.imgvProfilePic.image;
+    
     fvc.winkUser = user;
     fvc.profileId = [frnd[@"guestUserId"]intValue];
     fvc.dictFriend = frnd;

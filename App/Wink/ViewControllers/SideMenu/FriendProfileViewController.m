@@ -443,7 +443,8 @@
     //imgvVover.image = img;
     lblProfileName.text = selectedUser.name;
     [btnProfilePic setImageForState:UIControlStateNormal withURL:selectedUser.normalSizeProfURL];
-    
+    btnProfilePic.imageView.contentMode = UIViewContentModeScaleAspectFill;
+
     btnProfilePic.layer.cornerRadius = btnProfilePic.width /2;
     btnProfilePic.clipsToBounds = YES;
     //lblUserName.text = selectedUser.userName;
@@ -902,11 +903,19 @@
     }
     else
     {
+        
+        if(_isAllowFurtherNavigations)return;
+        
+        NSMutableDictionary *dict = [_arrDetail objectAtIndex:0];
+        
+        NSArray *filteredData = [_arrDetail filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"user_id == %@", [NSString stringWithFormat:@"%d",(int)people.tag]]];
+
+        
+        
         FriendProfileViewController *fvc = [WinkGlobalObject.storyboardMenubar instantiateViewControllerWithIdentifier:@"FriendProfileViewController"];
         
         fvc.profileId = (int)people.tag;
-        
-        
+        fvc.isAllowFurtherNavigations = true;
         [self presentViewController:fvc animated:YES completion:nil];
     }
 }

@@ -39,13 +39,16 @@
     {
         lblFullName.text = frnd.fullname;
     }
-    
     //[imgvProfilePic setImageWithURL:frnd.photoURL ];
-    [imgvProfilePic setImageWithURL:frnd.photoURL placeholderImage:[UIImage imageNamed:@"profile_default_photo.png"]];
+    [imgvProfilePic setImageWithURL:frnd.photoURL placeholderImage:[UIImage imageNamed:@"defaultthumbnail"]];
 }
 -(void)setGallaryPhoto:(WinkPhotos *)photos
 {
     [imgvProfilePic setImageWithURL:photos.gallaryNormalPhotoURL];
+    
+    [imgvProfilePic sd_setImageWithURL:photos.gallaryNormalPhotoURL placeholderImage:[UIImage imageNamed:@""] options:SDWebImageRefreshCached];
+    
+    
     if(photos.isVideo)
     {
         _imgvvideoLayer.hidden = NO;

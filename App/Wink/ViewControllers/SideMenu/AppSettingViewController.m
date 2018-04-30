@@ -38,6 +38,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    WinkUser *user = WinkGlobalObject.user;
+    
+    
+//    NSLog(@"WinkGlobalObject.user.isAllowMessage :-%@",WinkGlobalObject.user.isAllowMessage);
+    
+    
     UIApplication *app = [UIApplication sharedApplication];
     CGFloat statusBarHeight = app.statusBarFrame.size.height;
     

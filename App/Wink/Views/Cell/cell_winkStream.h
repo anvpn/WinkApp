@@ -21,6 +21,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *lbl_likeCount;
 @property (weak, nonatomic) IBOutlet UIButton *btnLike;
 @property (weak, nonatomic) IBOutlet UIImageView *imgVideo;
+@property (weak, nonatomic) IBOutlet UIView *vwContainer;
 
 
 

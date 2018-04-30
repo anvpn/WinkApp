@@ -33,21 +33,23 @@
 @property CGFloat sliderY;
 @property NSString *pageNO;
 @property BOOL isViewDidLoadCall;
+@property (strong,nonatomic) UIRefreshControl *refreshControl;
 
 
 @end
 
 @implementation WinkStreamViewController
-@synthesize clcvStream,arrStreamList,sideMenu,isStream,btnWinkStream,btnFrndFeed,vwSlider,arrFeedList,sliderY,pageNO,btnUpload,vwAdView,tbl_Photostream;
+@synthesize clcvStream,arrStreamList,sideMenu,isStream,btnWinkStream,btnFrndFeed,vwSlider,arrFeedList,sliderY,pageNO,btnUpload,vwAdView,tbl_Photostream,refreshControl;
 
 - (void)viewDidLoad
 {
+    [super viewDidLoad];
+
     //ana
     _isViewDidLoadCall = true;
     arrStreamList = [[NSMutableArray alloc]init];
-
-
-    [super viewDidLoad];
+   // isStream = YES;
+//---ana---
     UIApplication *app = [UIApplication sharedApplication];
     CGFloat statusBarHeight = app.statusBarFrame.size.height;
 
@@ -66,14 +68,18 @@
    // clcvStream.hidden=YES;
     //[_btnBalance setTitle:[NSString stringWithFormat:@"%@",WinkGlobalObject.user.cashOutBalance] forState:UIControlStateNormal];
 
+    
+    refreshControl = [[UIRefreshControl alloc]init];
+    [self.tbl_Photostream addSubview:refreshControl];
+    [refreshControl addTarget:self action:@selector(getWinkStreamData) forControlEvents:UIControlEventValueChanged];
+
 }
 -(void)viewDidAppear:(BOOL)animated
 {
     //arrFeedList = [[NSMutableArray alloc]init];
     pageNO = @"0";
-    isStream = false;
+//    isStream = false;
     sliderY = vwSlider.y;
-    [self btnWinkStreamTap:btnWinkStream];
 
     if(WinkGlobalObject.user.isAdmob)
     {
@@ -86,7 +92,16 @@
         vwAdView.hidden = YES;
     }
 
-    [self getWinkStreamData];
+    
+    if(arrStreamList.count <= 20)
+    {
+        [self btnWinkStreamTap:btnWinkStream];
+    }
+    else
+    {
+        [tbl_Photostream reloadData];
+    }
+    //[self getWinkStreamData];
 }
 - (void)didReceiveMemoryWarning
 {
@@ -101,6 +116,12 @@
 
 -(void)getWinkStreamData
 {
+    if(!isStream)
+    {
+        [self getFriendsFeedData];
+        return;
+    }
+    
     if([WinkUtil reachable])
     {
         if (_isViewDidLoadCall) {
@@ -115,6 +136,7 @@
         [WinkWebServiceAPI getWinkStream:dict completionHAndler:^(WinkAPIResponse *response, NSMutableArray *arrPhotos, int iteamId)
          {
             [SVProgressHUD dismiss];
+             [refreshControl endRefreshing];
            if(response.code == RCodeSuccess)
            {
                arrStreamList = [[NSMutableArray alloc]init];
@@ -159,6 +181,7 @@
                  dispatch_async(dispatch_get_main_queue(), ^{
                      [arrStreamList addObjectsFromArray:arrPhotos];
                      pageNO = [NSString stringWithFormat:@"%d",iteamId];
+                     NSLog(@"pageNO -----> %@",pageNO);
                      //[clcvStream reloadData];
                      [tbl_Photostream reloadData];
                      //[clcvStream reloadData];
@@ -195,6 +218,7 @@
         [WinkWebServiceAPI getFriendsFeed:dict completionHAndler:^(WinkAPIResponse *response, NSMutableArray *arrPhotos)
         {
              [SVProgressHUD dismiss];
+            [refreshControl endRefreshing];
              if(response.code == RCodeSuccess)
              {
                  arrFeedList = arrPhotos.mutableCopy;
@@ -268,6 +292,8 @@
     
     [self presentViewController:cvc animated:YES completion:nil];
 }
+
+#pragma mark - collection view code is commented by ana
 
 #pragma mark - UICollectionView Datasource & Delegate Method
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -377,7 +403,7 @@
 {
     if (isStream)
     {
-        [self getWinkStreamDataOfOtherPage];
+//        [self getWinkStreamDataOfOtherPage];
     }
     else
     {
@@ -426,6 +452,15 @@
     }
     return 0;
 }
+
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 20;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
+{
+    return 350;
+}
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *simpleTableIdentifier = @"Cell";
@@ -564,6 +599,20 @@
     {
         cell.imgVideo.hidden = YES;
     }
+    
+    
+    UIView* shadowView = cell.vwContainer;
+
+    shadowView.backgroundColor=[UIColor colorWithRed:228.0/255.0 green:228.0/255.0 blue:228.0/255.0 alpha:0.5];
+   // [shadowView.layer setCornerRadius:5.0f];
+    [shadowView.layer setBorderColor:[UIColor lightGrayColor].CGColor];
+    [shadowView.layer setBorderWidth:1.0f];
+    [shadowView.layer setShadowColor:[UIColor colorWithRed:225.0/255.0 green:228.0/255.0 blue:228.0/255.0 alpha:1.0].CGColor];
+    [shadowView.layer setShadowOpacity:1.0];
+    [shadowView.layer setShadowRadius:5.0];
+    [shadowView.layer setShadowOffset:CGSizeMake(5.0f, 5.0f)];
+    
+    
     return cell;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -590,6 +639,21 @@
 -(void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     //NSLog(@"%ld",(long)indexPath.row);
+   
+    //ana 
+    if(isStream)
+    {
+        NSInteger lastSectionIndex = [tableView numberOfSections] - 1;
+        NSInteger lastRowIndex = [tableView numberOfRowsInSection:lastSectionIndex] - 1;
+        if ((indexPath.section == lastSectionIndex) && (indexPath.row == lastRowIndex)) {
+            // This is the last cell
+            [self getWinkStreamDataOfOtherPage];
+        }
+        
+    }
+    
+    
+    
 }
 -(void)MessageButtonClicked:(UIButton*)sender
 {

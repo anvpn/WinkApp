@@ -149,6 +149,7 @@
 {
     WinkChat * chat = arrMessagesList[indexPath.row];
     ChatViewController *cvc = [WinkGlobalObject.storyboardMenubar instantiateViewControllerWithIdentifier:@"ChatViewController"];
+    chat.msgCount = @"";
     cvc.chat = chat;
     [self presentViewController:cvc animated:YES completion:nil];
 }
