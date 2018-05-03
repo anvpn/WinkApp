@@ -319,21 +319,43 @@ NSString *const UKeyDistance           =@"distance";
     balance = [userinfo[UKeyBalance]intValue];*/
     
     NSDictionary *userInfo = @{
-                               UKeyId           : WinkGlobalObject.user.ID,
-                               UKeyName         : WinkGlobalObject.user.name,
-                               UKeyUserName     : WinkGlobalObject.user.userName,
-                               UKeyEmail        : WinkGlobalObject.user.email,
-                               UKeylowPhotoUrl  : WinkGlobalObject.user.lowSizeProfString,
-                               UKeyOriginCoverUrl : WinkGlobalObject.user.originCoverString,
-                               UKeyFBID : WinkGlobalObject.user.fb_id,
-                               UKeyAdMob : [NSNumber numberWithBool:WinkGlobalObject.user.isAdmob],
-                               UKeyVerify : [NSNumber numberWithBool:WinkGlobalObject.user.verify],
-                               UKeyGhost : [NSNumber numberWithBool:WinkGlobalObject.user.isGhost],
-                               UKeyBalance : [NSNumber  numberWithInt:balance],
-                               UKeyCashOutBalance : WinkGlobalObject.user.cashOutBalance,
-                           };
+    UKeyId           : WinkGlobalObject.user.ID,
+    UKeyName         : WinkGlobalObject.user.name,
+    UKeyUserName     : WinkGlobalObject.user.userName,
+    UKeyEmail        : WinkGlobalObject.user.email,
+    UKeylowPhotoUrl  : WinkGlobalObject.user.lowSizeProfString,
+    UKeyOriginCoverUrl : WinkGlobalObject.user.originCoverString,
+    UKeyFBID : WinkGlobalObject.user.fb_id,
+    UKeyAdMob : [NSNumber numberWithBool:WinkGlobalObject.user.isAdmob],
+    UKeyVerify : [NSNumber numberWithBool:WinkGlobalObject.user.verify],
+    UKeyGhost : [NSNumber numberWithBool:WinkGlobalObject.user.isGhost],
+    UKeyBalance : [NSNumber  numberWithInt:balance],
+    UKeyCashOutBalance : WinkGlobalObject.user.cashOutBalance,
+    UKeyallowPhotosComments :[NSNumber numberWithBool:WinkGlobalObject.user.isAllowPhotoComment] ,
+
+    //ana
+    UKeyallowPhotosComments :[NSNumber numberWithBool:WinkGlobalObject.user.isAllowPhotoComment] ,
+
+    
+    UKeyallowComments :[NSNumber numberWithBool:WinkGlobalObject.user.isAllowComment] ,
+    UKeyallowMessages : [NSNumber numberWithBool:WinkGlobalObject.user.isAllowMessage],
+    UKeyallowLikesGCM : [NSNumber numberWithBool:WinkGlobalObject.user.isAllowLikesGCM],
+    UKeyallowGiftsGCM : [NSNumber numberWithBool:WinkGlobalObject.user.isAllowLikesGCM],
+    UKeyallowCommentsGCM : [NSNumber numberWithBool:WinkGlobalObject.user.isAllowCommentsGCM],
+    UKeyallowFollowersGCM : [NSNumber numberWithBool:WinkGlobalObject.user.isAllowFollowersGCM],
+    UKeyallowMessagesGCM : [NSNumber numberWithBool:WinkGlobalObject.user.isAllowMessagesGCM],
+    UKeyallowCommentReplyGCM : [NSNumber numberWithBool:WinkGlobalObject.user.isallowCommentReplyGCM],
+  
+
+    
+    };
+    
+    
     return userInfo;
 }
+
+
+
 - (instancetype)initFromUserDefault
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];

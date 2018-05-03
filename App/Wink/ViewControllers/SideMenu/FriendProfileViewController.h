@@ -17,5 +17,11 @@
 @property (strong,nonatomic) UIImage * imgProfile;
 @property BOOL isAllowFurtherNavigations;
 
+@property (strong,nonatomic) NSString * tempName;
+@property (strong,nonatomic) NSString * tempUserName;
+@property (strong,nonatomic) UIImage * tempImgProfile;
+@property (strong,nonatomic) NSURL * tempImgCover;
+
+
 
 @end

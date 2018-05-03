@@ -82,6 +82,18 @@
     [self prepareView];
     [self setupBasicDetails];
     
+    lblFullName.text = _tempName;
+    lblUserName.text = _tempUserName;
+    lblProfileName.text = _tempName;
+    
+    [imgvVover sd_setImageWithURL:_tempImgCover];
+    //imgvVover.image = _tempImgCover;
+    btnProfilePic.imageView.contentMode = UIViewContentModeScaleAspectFill;
+    [btnProfilePic setImage:_tempImgProfile forState:UIControlStateNormal];
+    btnProfilePic.imageView.contentMode = UIViewContentModeScaleAspectFill;
+
+    
+    
 }
 -(void)prepareView
 {
@@ -403,7 +415,7 @@
 {
     selectedUser = _winkUser;
     [self prepareProfile];
-    selectedUser = nil;
+    //selectedUser = nil;
 }
 
 - (void)didReceiveMemoryWarning
@@ -493,7 +505,6 @@
     CGSize scrollableSize = CGSizeMake(scrlvBG.frame.size.width,1300);
     [scrlvBG setContentSize:scrollableSize];
     //[scrlvBG setContentSize:CGSizeMake(scrlvBG.width, scrlvBG.height)];
-    [SVProgressHUD dismiss];
     
     
     float scrollDuration = 3.0;
@@ -521,6 +532,8 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                      selectedUser = user;
                      [self prepareProfile];
+                    [SVProgressHUD dismiss];
+
                  });
                  
                 
@@ -906,13 +919,45 @@
         
         if(_isAllowFurtherNavigations)return;
         
-        NSMutableDictionary *dict = [_arrDetail objectAtIndex:0];
-        
-        NSArray *filteredData = [_arrDetail filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"user_id == %@", [NSString stringWithFormat:@"%d",(int)people.tag]]];
-
-        
-        
         FriendProfileViewController *fvc = [WinkGlobalObject.storyboardMenubar instantiateViewControllerWithIdentifier:@"FriendProfileViewController"];
+        
+        NSDictionary *arrDict = [_arrDetail objectAtIndex:0];
+        
+        NSDictionary *matchDict = [[NSDictionary alloc]init];
+            
+        for (int i = 0; i < arrDict.count; i++) {
+            
+            NSDictionary *dict = [arrDict.allValues objectAtIndex:i];
+            
+            if([dict.allValues containsObject:[NSString stringWithFormat:@"%d",people.tag]])
+                
+            {
+                
+                NSLog(@"YES");
+                
+                matchDict = dict;
+                
+                NSLog(@"dict %@",dict);
+                
+                
+                
+                if(([dict objectForKey:@"fullname"] != [NSNull null]))
+                    
+                    fvc.tempName = [dict valueForKey:@"fullname"];
+                
+                
+                
+                if(([dict objectForKey:@"login"] != [NSNull null]))
+                    
+                    fvc.tempUserName = [dict valueForKey:@"login"];
+                
+                fvc.tempImgProfile = people.imageView.image;
+                
+                break;
+                
+            }
+            
+        }
         
         fvc.profileId = (int)people.tag;
         fvc.isAllowFurtherNavigations = true;

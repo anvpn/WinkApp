@@ -519,6 +519,47 @@
     {
         FriendProfileViewController *fvc = [WinkGlobalObject.storyboardMenubar instantiateViewControllerWithIdentifier:@"FriendProfileViewController"];
         
+        
+        NSDictionary *arrDict = [_arrDetail objectAtIndex:0];
+        
+        NSDictionary *matchDict = [[NSDictionary alloc]init];
+        
+        
+        
+        for (int i = 0; i < arrDict.count; i++) {
+            
+            NSDictionary *dict = [arrDict.allValues objectAtIndex:i];
+            
+            if([dict.allValues containsObject:[NSString stringWithFormat:@"%d",people.tag]])
+                
+            {
+                
+                NSLog(@"YES");
+                
+                matchDict = dict;
+                
+                NSLog(@"dict %@",dict);
+                
+                
+                
+                if(([dict objectForKey:@"fullname"] != [NSNull null]))
+                    
+                    fvc.tempName = [dict valueForKey:@"fullname"];
+                
+                
+                
+                if(([dict objectForKey:@"login"] != [NSNull null]))
+                    
+                    fvc.tempUserName = [dict valueForKey:@"login"];
+                
+                fvc.tempImgProfile = people.imageView.image;
+                
+                break;
+                
+            }
+            
+        }
+        
         fvc.profileId = (int)people.tag;
         
         

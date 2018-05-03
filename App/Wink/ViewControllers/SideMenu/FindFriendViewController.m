@@ -350,6 +350,10 @@
     
     fvc.profileId = [user.ID intValue];
     
+    FriendsCollectionCell *cell = (FriendsCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    fvc.tempName = user.name;
+    fvc.tempUserName = [NSString stringWithFormat:@"@%@",user.userName];
+    fvc.tempImgProfile = cell.imgvProfilePic.image;
     [self.navigationController presentViewController:fvc animated:YES completion:nil];
 }
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -387,6 +391,7 @@
                   [NSCharacterSet whitespaceCharacterSet]];
     [textField resignFirstResponder];
     
+    
     if(searchText.length > 0)
     {
         if([WinkUtil reachable])
@@ -402,6 +407,8 @@
             [self showAlertWithMessage:WinkNoInternet];
         }
     }
+    
+    txtSearch.text = @"";
     
     return YES;
 }
@@ -432,6 +439,9 @@
         click =2;
         [_btn_search setImage:[UIImage imageNamed:@"btn_closesearch.png"] forState:UIControlStateNormal];
         txtSearch.hidden=NO;
+        [txtSearch becomeFirstResponder];
+        [[UITextField appearance] setTintColor:[UIColor whiteColor]];
+
         _btnBalance.hidden=YES;
         _btn_notification.hidden=YES;
         lblTotalFound.hidden=YES;
@@ -439,6 +449,7 @@
     else
     {
         click =1;
+        txtSearch.text = @"";
         [_btn_search setImage:[UIImage imageNamed:@"btn_search.png"] forState:UIControlStateNormal];
         txtSearch.hidden=YES;
         _btnBalance.hidden=NO;

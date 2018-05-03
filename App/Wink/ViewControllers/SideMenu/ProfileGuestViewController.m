@@ -233,6 +233,11 @@
     fvc.winkUser = user;
     fvc.profileId = [frnd[@"guestUserId"]intValue];
     fvc.dictFriend = frnd;
+    
+    fvc.tempName = user.name;
+    fvc.tempUserName = [NSString stringWithFormat:@"@%@",user.userName];
+    fvc.tempImgProfile = cell.imgvProfilePic.image;
+    fvc.tempImgCover = user.originCoverURL;
     [self.navigationController presentViewController:fvc animated:YES completion:nil];
 
 }

@@ -83,6 +83,15 @@
     [scrlvBG setContentSize:CGSizeMake(scrlvBG.width, vwBG.height)];
 }
 
+-(void)viewWillDisappear:(BOOL)animated
+{
+    
+    
+    [WinkGlobalObject.user saveInUserDefaults];
+//    [[NSUserDefaults standardUserDefaults] setObject:WinkGlobalObject.user forKey:@"winkuser"];
+//    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

@@ -235,6 +235,9 @@
     imgvProfile.layer.masksToBounds = YES;
     [imgvProfile setImageWithURL:chat.WithUserPhotoUrl placeholderImage:[UIImage imageNamed:@"profile_default_photo.png"]];
     
+    //ana
+    imgvProfile.contentMode = UIViewContentModeScaleAspectFill ;
+    
     NSString *Verify = chat.WithUserVerify;
     
     if ([Verify isEqualToString:@"1"])
@@ -258,6 +261,12 @@
     const char *jsonString = [chat.lastMessage UTF8String];
     NSData *jsonData = [NSData dataWithBytes:jsonString length:strlen(jsonString)];
     NSString *goodMsg = [[NSString alloc] initWithData:jsonData encoding:NSNonLossyASCIIStringEncoding];
+    
+    _lblMsgCount.layer.cornerRadius = _lblMsgCount.frame.size.width/2;
+    _lblMsgCount.clipsToBounds = true;
+    _lblMsgCount.layer.masksToBounds = true;
+    
+    
     
     _lblLastMessage.text = goodMsg;
     lblTimeAgo.text = chat.lastMessageAgo;

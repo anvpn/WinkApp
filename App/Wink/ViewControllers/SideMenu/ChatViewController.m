@@ -7,7 +7,7 @@
 //
 
 #import "ChatViewController.h"
-
+#import "TPKeyboardAvoidingTableView.h"
 
 
 @interface ChatViewController ()<UITableViewDelegate, UITableViewDataSource,TextCellDelegate,MediaCellDelegate,AGEmojiKeyboardViewDelegate,AGEmojiKeyboardViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
@@ -18,7 +18,8 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *lblWithUserName;
 //@property (weak, nonatomic) IBOutlet JSQMessagesCollectionView *clcvChat;
-@property (weak, nonatomic) IBOutlet UITableView *tblvChat;
+//@property (weak, nonatomic) IBOutlet UITableView *tblvChat;
+@property (weak, nonatomic) IBOutlet TPKeyboardAvoidingTableView *tblvChat;
 
 @property (strong , nonatomic) NSMutableArray *arrMesaagesList;
 @property (strong, nonatomic) NSString *messageID;
@@ -66,6 +67,10 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:(BOOL)animated];
+    
+    self.tblvChat.delegate = self;
+    self.tblvChat.dataSource = self;
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillAppear:)
                                                  name:UIKeyboardWillShowNotification
@@ -151,9 +156,10 @@
     CGRect messageFrame = vwTextInput.frame;
     messageFrame.origin.y -= keyboardSize.height;
     
-    CGRect rect = CGRectMake(0, [UIScreen mainScreen].bounds.size.height -(keyboardSize.height + vwTextInput.frame.size.height + 40), [UIScreen mainScreen].bounds.size.width, vwTextInput.frame.size.height);
+    CGRect rect = CGRectMake(0, [UIScreen mainScreen].bounds.size.height -(keyboardSize.height + vwTextInput.frame.size.height ), [UIScreen mainScreen].bounds.size.width, vwTextInput.frame.size.height);
     
     [vwTextInput setFrame:rect];
+
     
 }
 - (void)keyboardWillDisappear:(NSNotification *)notification
@@ -278,12 +284,18 @@
 }
 -(void)sendNewMessage
 {
+    [self.txtchat resignFirstResponder];
+    
     NSString *str = [_txtchat.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
     NSString *msg = [self encodeEmojis:str];
     
     if([WinkUtil reachable] &&(selectedChatImage != nil || ![str isEqualToString:@""]))
     {
+        
+        [self.txtchat setText:@""];
+        
+
         // accountId,accessToken,profileId,chatId,messageText,messageImg,listId,chatFromUserId,chatToUserId
         NSDictionary * dict = @{
                                 UKeyAccountId : WinkGlobalObject.user.ID,
@@ -328,13 +340,30 @@
              }
              else
              {
-                 [self showAlertWithMessage:response.error.localizedDescription];
+                 //ana
+                 
+        dispatch_async(dispatch_get_main_queue(), ^{
+           
+            if(selectedChatImage != nil)
+            {
+                 vwTextInput.frame = CGRectMake(vwTextInput.frame.origin.x, [UIScreen mainScreen].bounds.size.height - vwTextview.frame.size.height, vwTextInput.frame.size.width, vwTextInput.frame.size.height - vwImageView.frame.size.height);
+            }
+            
+           
+                     vwImageView.hidden = true;
+                     selectedChatImage = nil;
+                     imgvImage.image = nil;
+                     [self getChatMessages];
+        });
+                 
+                
+//                 [self showAlertWithMessage:response.error.localizedDescription];
              }
          }];
     }
     else
     {
-        
+        [self showAlertWithMessage:@"Please connect with internet"];
     }
 }
 
@@ -452,6 +481,7 @@
         {
             cell = [[SPHTextBubbleCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:L_CellIdentifier];
         }
+        
         cell.bubbletype=([feed_data.chat_media_type isEqualToString:kTextByme])?@"RIGHT":@"LEFT";
         
         NSString *goodMsg = [self decodeEmojis:feed_data.chat_message];
@@ -473,6 +503,7 @@
             fromProfURL = [WinkWebservice URLForProfileImage:lastComponent];
             
         }
+        
         [cell.AvatarImageView setImageWithURL:fromProfURL placeholderImage:[UIImage imageNamed:@"profile_default_photo"]];
         img_Right = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDetectedRight:)];
         
@@ -520,6 +551,8 @@
         lastComponent = [url lastPathComponent];
         fromProfURL = [WinkWebservice URLForChatImages:lastComponent];
     }
+    
+    cell.messageImageView.image = [UIImage imageNamed:@"img_defaultthumbnail"];
     NSLog(@"Purl:-%@",fromProfURL);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         NSData *imgData = [NSData dataWithContentsOfURL:fromProfURL];
@@ -534,7 +567,7 @@
                 }
                 else
                 {
-                    cell.messageImageView.image = [UIImage imageNamed:@"defaultthumbnail.jpg"];
+                    cell.messageImageView.image = [UIImage imageNamed:@"img_defaultthumbnail"];
                     
                     //NSLog(@" image url was %@ ",feed_data.chat_Thumburl);
                 }
@@ -542,7 +575,7 @@
             }
             else
             {
-                cell.messageImageView.image = [UIImage imageNamed:@"defaultthumbnail.jpg"];
+                cell.messageImageView.image = [UIImage imageNamed:@"img_defaultthumbnail"];
                 //NSLog(@" image url was %@ ",feed_data.chat_Thumburl);
             }
             

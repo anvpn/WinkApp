@@ -163,8 +163,12 @@
     
     FriendProfileViewController *fvc = [WinkGlobalObject.storyboardMenubar instantiateViewControllerWithIdentifier:@"FriendProfileViewController"];
     
-    fvc.profileId = [frnd.userId intValue];
+    FriendsCollectionCell *cell = (FriendsCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
     
+    fvc.profileId = [frnd.userId intValue];
+    fvc.tempName = frnd.fullname;
+    fvc.tempUserName = [NSString stringWithFormat:@"@%@",frnd.userName];
+    fvc.tempImgProfile = cell.imgvProfilePic.image;
     [self presentViewController:fvc animated:YES completion:nil];
 }
 /*- (CGSize)collectionView:(UICollectionView *)collectionView
