@@ -72,6 +72,11 @@
     {
         [btnBack setImage:[UIImage imageNamed:@"Back white.png"] forState:UIControlStateNormal];
     }
+    
+    _lbl_Notificationcount.layer.cornerRadius = _lbl_Notificationcount.frame.size.width/2;
+    _lbl_Notificationcount.clipsToBounds = true;
+    _lbl_Notificationcount.layer.masksToBounds = true;
+    
 }
 -(void)viewDidAppear:(BOOL)animated
 {
@@ -212,7 +217,7 @@
 //}
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(([UIScreen mainScreen].bounds.size.width - 20)/2, ([UIScreen mainScreen].bounds.size.width - 20)/2);
+    return CGSizeMake(([UIScreen mainScreen].bounds.size.width / 2) - 15, ([UIScreen mainScreen].bounds.size.width / 2) - 15);
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath

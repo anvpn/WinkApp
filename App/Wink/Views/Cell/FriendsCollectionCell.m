@@ -44,9 +44,9 @@
 }
 -(void)setGallaryPhoto:(WinkPhotos *)photos
 {
-    [imgvProfilePic setImageWithURL:photos.gallaryNormalPhotoURL];
+//    [imgvProfilePic setImageWithURL:photos.gallaryNormalPhotoURL];
     
-    [imgvProfilePic sd_setImageWithURL:photos.gallaryNormalPhotoURL placeholderImage:[UIImage imageNamed:@""] options:SDWebImageRefreshCached];
+    [imgvProfilePic sd_setImageWithURL:photos.gallaryNormalPhotoURL placeholderImage:[UIImage imageNamed:@"img_defaultthumbnail"] options:SDWebImageRefreshCached];
     
     
     if(photos.isVideo)
@@ -57,7 +57,7 @@
     {
         _imgvvideoLayer.hidden = YES;
     }
-    imgvProfilePic.contentMode = UIViewContentModeScaleToFill;
+    imgvProfilePic.contentMode = UIViewContentModeScaleAspectFill;
     imgvProfilePic.layer.masksToBounds=YES;
     //imgvProfilePic.contentMode UIViewContentMode.ScaleAspectFill;
     //imgvProfilePic.layer.maskToBounds=YES;

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SPH_PARAM_List.h"
 
 @protocol MediaCellDelegate;
 
@@ -20,6 +21,7 @@
 @property (nonatomic,strong) UIImageView *AvatarImageView;
 @property (nonatomic,strong) UIImageView *messageImageView;
 
+@property (nonatomic,strong) SPH_PARAM_List *modelClass;
 
 @property (nonatomic, assign) id <MediaCellDelegate> CustomDelegate;
 - (void)showMenu;

@@ -56,6 +56,14 @@
     [self getPeopleOftheDay];
     
 }
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    _lbl_Notificationcount.layer.cornerRadius = _lbl_Notificationcount.frame.size.width/2;
+    _lbl_Notificationcount.clipsToBounds = true;
+    _lbl_Notificationcount.layer.masksToBounds = true;
+}
+
 - (IBAction)btnBalanceTap:(id)sender
 {
     CashOutViewController *cvc = [WinkGlobalObject.storyboardMain instantiateViewControllerWithIdentifier:@"CashOutViewController"];
@@ -410,19 +418,24 @@
         
         for (int i = 0; i < arrDict.count; i++) {
             NSDictionary *dict = [arrDict.allValues objectAtIndex:i];
-            if([dict.allValues containsObject:[NSString stringWithFormat:@"%d",people.tag]])
+            
+            if([dict isKindOfClass:[NSDictionary class]])
             {
-                NSLog(@"YES");
-                matchDict = dict;
-                NSLog(@"dict %@",dict);
-
-                if(([dict objectForKey:@"fullname"] != [NSNull null]))
-                    fvc.tempName = [dict valueForKey:@"fullname"];
-
-                if(([dict objectForKey:@"login"] != [NSNull null]))
-                fvc.tempUserName = [dict valueForKey:@"login"];
-                fvc.tempImgProfile = people.imageView.image;
-                break;
+                
+                if([dict.allValues containsObject:[NSString stringWithFormat:@"%d",people.tag]])
+                {
+                    NSLog(@"YES");
+                    matchDict = dict;
+                    NSLog(@"dict %@",dict);
+                    
+                    if(([dict objectForKey:@"fullname"] != [NSNull null]))
+                        fvc.tempName = [dict valueForKey:@"fullname"];
+                    
+                    if(([dict objectForKey:@"login"] != [NSNull null]))
+                        fvc.tempUserName = [dict valueForKey:@"login"];
+                    fvc.tempImgProfile = people.imageView.image;
+                    break;
+                }
             }
         }
         

@@ -46,8 +46,17 @@
                                             action:@selector(handleSingleTap:)];
     [self.View_tuch addGestureRecognizer:singleFingerTap];
 
-    [self prepareView];
 }
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    btnProfile.layer.cornerRadius = btnProfile.width / 2;
+    btnProfile.clipsToBounds = YES;
+    
+    [self prepareView];
+
+}
+
 - (void)handleSingleTap:(UITapGestureRecognizer *)recognizer
 {
     [self hideMenu];
@@ -55,8 +64,8 @@
 }
 -(void)prepareView
 {
-    tblvMenu.height = tblvMenu.contentSize.height;
-    vwMenu.height   = tblvMenu.height;
+//    tblvMenu.height = tblvMenu.contentSize.height;
+//    vwMenu.height   = tblvMenu.height;
     //
     
 //    WinkUser *userDemo = [[WinkUser alloc]init];
@@ -89,7 +98,7 @@
     btnProfile.clipsToBounds = YES;
     btnProfile.layer.borderColor = [UIColor whiteColor].CGColor;
     btnProfile.layer.borderWidth = 3.0;
-    [scrlvBG setContentSize:CGSizeMake(scrlvBG.width,vwMenu.y + vwMenu.height+10)];
+//    [scrlvBG setContentSize:CGSizeMake(scrlvBG.width,vwMenu.y + vwMenu.height+10)];
 }
 #pragma mark - Side Menu Methods
 - (void)showMenu

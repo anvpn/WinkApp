@@ -141,7 +141,12 @@
       
         UIImage *coloredImage = [UIImage imageNamed:@"messages_left_bubble.png"];
         //UIImage *coloredImage = [[UIImage imageNamed:@"messages_left_bubble.png"] maskWithColor:BLUE_TEXT_HIGHLIGHT_COLOR];
-        messageBackgroundView.image = [[UIImage imageWithCGImage:coloredImage.CGImage] stretchableImageWithLeftCapWidth:20 topCapHeight:16];
+//        messageBackgroundView.image = [[UIImage imageWithCGImage:coloredImage.CGImage] stretchableImageWithLeftCapWidth:20 topCapHeight:16];
+        
+        
+        messageBackgroundView.image = [[UIImage imageNamed:@"messages_left_bubble.png"] stretchableImageWithLeftCapWidth:1 topCapHeight:16];
+
+        
         
     }else
     {

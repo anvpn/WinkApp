@@ -7,6 +7,7 @@
 //
 
 #import "FriendProfileViewController.h"
+#import "ServerAPI.h"
 
 @interface FriendProfileViewController ()<SettingOptionViewControllerDelegate>
 
@@ -821,11 +822,17 @@
     {
         [SVProgressHUD show];
         
+        //ana : prevent crash
+        if(selectedUser == nil)return;
+        
+        
         NSDictionary *dict = @{
                                UKeyAccountId : WinkGlobalObject.user.ID,
                                UKeyAccessToken : WinkGlobalObject.accessToken,
                                UKeyProfileId : selectedUser.ID
                                };
+        
+         
         [WinkWebServiceAPI likeFriendProfile:dict completionHandler:^(WinkAPIResponse *response, NSDictionary *responseDict)
          {
              [SVProgressHUD dismiss];
@@ -840,7 +847,23 @@
              }
              else
              {
-                 [self showAlertWithMessage:response.error.localizedDescription];
+                 //ana
+                 if([response.error.localizedDescription containsString:@"The data couldn’t be read because it isn’t in the correct format"])
+                 {
+                        [self showAlertWithMessage:@"Profile Like Sucessfully"];
+                     
+                     _btnLike.hidden = true;
+                     
+                     int count = [lblLikesCount.text intValue];
+                     lblLikesCount.text = [NSString stringWithFormat:@"%d",count + 1];
+                     
+                 }
+                 else
+                 {
+                        [self showAlertWithMessage:response.error.localizedDescription];
+                 }
+                 
+              
              }
             
         }];
@@ -928,33 +951,29 @@
         for (int i = 0; i < arrDict.count; i++) {
             
             NSDictionary *dict = [arrDict.allValues objectAtIndex:i];
-            
-            if([dict.allValues containsObject:[NSString stringWithFormat:@"%d",people.tag]])
-                
+            if([dict isKindOfClass:[NSDictionary class]])
             {
-                
-                NSLog(@"YES");
-                
-                matchDict = dict;
-                
-                NSLog(@"dict %@",dict);
-                
-                
-                
-                if(([dict objectForKey:@"fullname"] != [NSNull null]))
+                if([dict.allValues containsObject:[NSString stringWithFormat:@"%ld",(long)people.tag]])
+                {
                     
-                    fvc.tempName = [dict valueForKey:@"fullname"];
-                
-                
-                
-                if(([dict objectForKey:@"login"] != [NSNull null]))
+                    NSLog(@"YES");
+                    matchDict = dict;
+                    NSLog(@"dict %@",dict);
+                    if(([dict objectForKey:@"fullname"] != [NSNull null]))
+                        
+                        fvc.tempName = [dict valueForKey:@"fullname"];
                     
-                    fvc.tempUserName = [dict valueForKey:@"login"];
-                
-                fvc.tempImgProfile = people.imageView.image;
-                
-                break;
-                
+                    
+                    
+                    if(([dict objectForKey:@"login"] != [NSNull null]))
+                        
+                        fvc.tempUserName = [dict valueForKey:@"login"];
+                    
+                    fvc.tempImgProfile = people.imageView.image;
+                    
+                    break;
+                    
+                }
             }
             
         }

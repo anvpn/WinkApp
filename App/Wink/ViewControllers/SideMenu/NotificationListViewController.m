@@ -189,6 +189,7 @@
             
         case WinkNotificationGift:
             pgvc.profileId = [WinkGlobalObject.user.ID intValue];
+            pgvc.isUserProfile = true;
             [self presentViewController:pgvc animated:YES completion:nil];
             break;
             

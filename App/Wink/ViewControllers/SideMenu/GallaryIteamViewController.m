@@ -160,7 +160,7 @@
     
     if(selectedPhoto.isVideo)
     {
-        [btnGallaryImage setImage:[UIImage imageNamed:@"play-button.png"] forState:UIControlStateNormal];
+        [btnGallaryImage setImage:[UIImage imageNamed:@"video"] forState:UIControlStateNormal];
     }
     else
     {
@@ -200,6 +200,9 @@
     {
         likeCount.hidden = YES;
     }
+    
+    selectedPhoto.isMyLike = isMyLike;
+
     if(isMyLike)
     {
         [btnLike setImage:[UIImage imageNamed:@"perk_active.png"] forState:UIControlStateNormal];
@@ -207,6 +210,7 @@
     else
     {
         [btnLike setImage:[UIImage imageNamed:@"perk.png"] forState:UIControlStateNormal];
+
     }
 }
 -(void)setFrames
@@ -300,7 +304,7 @@
         gallaryNormalPhotoURL = selectedPhoto.gallaryNormalPhotoURL;
         isMyLike = selectedPhoto.isMyLike;
         isCommentAllow = selectedPhoto.isAllowComment;
-        commentCount = [selectedPhoto.commentCount intValue];
+        commentCount = [selectedPhoto.likesCount intValue];
         NSString *s;
         if (selectedPhoto.isAccessMode)
         {
@@ -669,6 +673,18 @@
             [SVProgressHUD dismiss];
             if(response.code == RCodeSuccess)
             {
+                if(isMyLike)
+                {
+                    selectedPhoto.likesCount =   [NSString stringWithFormat:@"%d",[selectedPhoto.likesCount intValue] + 1];
+
+                }
+                else
+                {
+                    selectedPhoto.likesCount =   [NSString stringWithFormat:@"%d",[selectedPhoto.likesCount intValue] - 1];
+
+                }
+                
+                
                 [self setLikesView:Likes andIsMyLike:isMyLike];
             }
             else

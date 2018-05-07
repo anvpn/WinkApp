@@ -109,6 +109,18 @@
     
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tapToDismiss:) name:SVProgressHUDDidReceiveTouchEventNotification object:nil];
+
+    _lbl_Notificationcount.layer.cornerRadius = _lbl_Notificationcount.frame.size.width/2;
+    _lbl_Notificationcount.clipsToBounds = true;
+    _lbl_Notificationcount.layer.masksToBounds = true;
+    
+    [tbl_Photostream reloadData];
+    
+}
+
 -(void)viewWillDisappear:(BOOL)animated
 {
     _isViewDidLoadCall = false;
@@ -686,7 +698,29 @@
              [SVProgressHUD dismiss];
              if(response.code == RCodeSuccess)
              {
-                 [self getWinkStreamData];
+                 //ana changes :----
+                 
+                 WinkPhotos *photo = [arrStreamList objectAtIndex:indexPath.row];
+                 
+                 cell_winkStream *cell = [tbl_Photostream cellForRowAtIndexPath:indexPath];
+                 cell.lbl_likeCount.text = [NSString stringWithFormat:@"%d",Likes];
+                 photo.likesCount = [NSString stringWithFormat:@"%d",Likes];
+                 photo.isMyLike = isMyLike;
+
+                 if (isMyLike)
+                 {
+                     [cell.btnLike setImage:[UIImage imageNamed:@"perk_active.png"] forState:UIControlStateNormal];
+                 }
+                 else
+                 {
+                     [cell.btnLike setImage:[UIImage imageNamed:@"perk.png"] forState:UIControlStateNormal];
+                 }
+                 
+                 [tbl_Photostream reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                 
+                 
+                 
+//                 [self getWinkStreamData];
                  //[self setLikesView:Likes andIsMyLike:isMyLike];
              }
              else
@@ -706,5 +740,10 @@
     [self presentViewController:nvc animated:YES completion:nil];
 
 }
+
+//-(void)tapToDismiss:(NSNotification *)notification{
+//    [SVProgressHUD dismiss];
+//    //maybe other code to stop whatever your progress is
+//}
 
 @end

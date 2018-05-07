@@ -76,6 +76,11 @@
 
 }
 
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [WinkGlobalObject.user saveInUserDefaults];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -124,6 +129,8 @@
              if(response.code == RCodeSuccess)
              {
                  WinkGlobalObject.user.isAllowLikesGCM = isLikes;
+                 [WinkGlobalObject.user saveInUserDefaults];
+
                  if(isLikes)
                  {
                      [imgvLikes setImage:[UIImage imageNamed:@"checked.png"]];
@@ -143,6 +150,9 @@
                  [self showAlertWithMessage:response.error.localizedDescription];
              }
          }];
+        
+        
+
     }
     else
     {
@@ -167,6 +177,8 @@
              if(response.code == RCodeSuccess)
              {
                  WinkGlobalObject.user.isAllowFollowersGCM = isFriendRequest;
+                 [WinkGlobalObject.user saveInUserDefaults];
+
                  if(isFriendRequest)
                  {
                      [imgvFriendRequest setImage:[UIImage imageNamed:@"checked.png"]];
@@ -181,6 +193,9 @@
                  [self showAlertWithMessage:response.message];
                  isFriendRequest = !isFriendRequest;
              }
+             
+             [WinkGlobalObject.user saveInUserDefaults];
+
          }];
     }
     else
@@ -206,6 +221,8 @@
              if(response.code == RCodeSuccess)
              {
                  WinkGlobalObject.user.isAllowMessagesGCM = isPrivateMessage;
+                 [WinkGlobalObject.user saveInUserDefaults];
+
                  if(isPrivateMessage)
                  {
                      [imgvPrivateMessage setImage:[UIImage imageNamed:@"checked.png"]];
@@ -220,6 +237,9 @@
                  [self showAlertWithMessage:response.message];
                  isPrivateMessage = !isPrivateMessage;
              }
+             
+             [WinkGlobalObject.user saveInUserDefaults];
+
          }];
     }
     else
@@ -245,6 +265,8 @@
              if(response.code == RCodeSuccess)
              {
                  WinkGlobalObject.user.isAllowGiftGCM = isGifts;
+                 [WinkGlobalObject.user saveInUserDefaults];
+
                  if(isGifts)
                  {
                      [imgvGifts setImage:[UIImage imageNamed:@"checked.png"]];
@@ -267,5 +289,7 @@
     }
     
 }
+
+
 
 @end

@@ -59,6 +59,13 @@
     [self getGuestDetail];
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    _lbl_Notificationcount.layer.cornerRadius = _lbl_Notificationcount.frame.size.width/2;
+    _lbl_Notificationcount.clipsToBounds = true;
+    _lbl_Notificationcount.layer.masksToBounds = true;
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -192,7 +199,15 @@
 //        [cell.imgvProfilePic setImageWithURL:photourl placeholderImage:[UIImage imageNamed:@"profile_default_photo.png"]];
 //
     
-        [cell.imgvProfilePic sd_setImageWithURL:photourl placeholderImage:[UIImage imageNamed:@"profile_default_photo.png"] options:SDWebImageRefreshCached];
+//        [cell.imgvProfilePic sd_setImageWithURL:photourl placeholderImage:[UIImage imageNamed:@"profile_default_photo.png"] options:SDWebImageRefreshCached];
+        
+        
+        [cell.imgvProfilePic sd_setImageWithURL:photourl completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+           
+            NSLog(@"image received");
+            
+        }];
+        
         
         
     }

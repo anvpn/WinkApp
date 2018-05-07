@@ -128,6 +128,10 @@
     _btnFilter.layer.borderColor = [UIColor purpleColor].CGColor;
     _btnFilter.layer.borderWidth = 1;
     
+    _lbl_Notificationcount.layer.cornerRadius = _lbl_Notificationcount.frame.size.width/2;
+    _lbl_Notificationcount.clipsToBounds = true;
+    _lbl_Notificationcount.layer.masksToBounds = true;
+    
 }
 
 

@@ -215,11 +215,25 @@
     imgvProfile.layer.cornerRadius = imgvProfile.width / 2;
     imgvProfile.layer.masksToBounds = YES;
     
-    lblFullName.text = dict[@"firstname"];
-    NSString *firstLetter = [dict[@"firstname"] substringToIndex:1];
-    _lbl_firstname.text = firstLetter;
+    if([dict valueForKey:@"firstname"] != nil)
+    {
+        lblFullName.text = dict[@"firstname"];
+        NSString *firstLetter = @"";
+        if(lblFullName.text.length > 1)
+        {
+           firstLetter = [dict[@"firstname"] substringToIndex:1];
+        }
+        _lbl_firstname.text = firstLetter;
+    }
+    else
+    {
+        _lbl_firstname.text =  @"#";
+    }
+    if([dict valueForKey:@"number"] != nil)
+    {
+        _lblPhoneNumber.text = dict[@"number"];
+    }
     
-    _lblPhoneNumber.text = dict[@"number"];
     
     float red = arc4random() % 255 / 255.0;
     float green = arc4random() % 255 / 255.0;

@@ -11,6 +11,7 @@
 @interface ProfileGiftsViewController : WinkViewController
 
 @property int profileId;
+@property BOOL isUserProfile ;
 
 
 @end

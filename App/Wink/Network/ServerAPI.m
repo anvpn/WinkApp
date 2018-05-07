@@ -110,15 +110,18 @@ UIActivityIndicatorView *indicator ;
     NSMutableURLRequest *_request = [NSMutableURLRequest requestWithURL:_url];
     [_request setTimeoutInterval:30];
     [_request setHTTPMethod:@"POST"];
-    [_request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    
+    [_request setValue:@"application/x-www-form-urlencoded; charset=UTF-8" forHTTPHeaderField:@"Content-Type"];
+
+//    [_request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [_request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [_request setHTTPBody:jsonData];
     
-    if(TokenEmbedded == true)
-    {
-        [_request setValue:token forHTTPHeaderField:@"Authorization"];
-        
-    }
+//    if(TokenEmbedded == true)
+//    {
+//        [_request setValue:token forHTTPHeaderField:@"Authorization"];
+//        
+//    }
     
     [self callWS:_request withSucessBlock:^(id result) {
         [self stopIndicator];

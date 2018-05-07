@@ -57,6 +57,10 @@
         if(response.code == RCodeSuccess)
         {
             arrGiftsList = arrGifts.mutableCopy;
+            
+            if(arrGiftsList.count == 0)
+                tblvGifts.hidden = true;
+            
             [tblvGifts reloadData];
         }
         else if(response.message)
@@ -96,6 +100,9 @@
     WinkGift *gift = arrGiftsList[indexPath.section];
     [cell setGiftCellData:gift];
     [cell.btn_Giftcancel addTarget:self action:@selector(checkButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    
+    if(!_isUserProfile)
+        cell.btn_Giftcancel.hidden = true;
     
     [tableView setSeparatorColor:[UIColor clearColor]];
     return cell;

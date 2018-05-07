@@ -7,6 +7,7 @@
 //
 
 #import "InviteFriendViewController.h"
+#import <AddressBookUI/AddressBookUI.h>
 
 
 NSString *AppURL = @"https://itunes.apple.com/us/app/wink-free-dating-ios-app/id1256893097";
@@ -83,7 +84,6 @@ NSString *AppURL = @"https://itunes.apple.com/us/app/wink-free-dating-ios-app/id
     
 
     
-    [self getContacts];
     
     if(WinkGlobalObject.user.isAdmob)
     {
@@ -96,6 +96,21 @@ NSString *AppURL = @"https://itunes.apple.com/us/app/wink-free-dating-ios-app/id
     }
     // Do any additional setup after loading the view.
 }
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [self permission];
+    
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [self getContacts];
+//
+//    });
+    
+    _lbl_Notificationcount.layer.cornerRadius = _lbl_Notificationcount.frame.size.width/2;
+    _lbl_Notificationcount.clipsToBounds = true;
+    _lbl_Notificationcount.layer.masksToBounds = true;
+}
+
 - (IBAction)btnBalanceTap:(id)sender
 {
     CashOutViewController *cvc = [WinkGlobalObject.storyboardMain instantiateViewControllerWithIdentifier:@"CashOutViewController"];
@@ -141,8 +156,13 @@ NSString *AppURL = @"https://itunes.apple.com/us/app/wink-free-dating-ios-app/id
                                            @"imagedata" :contact.imageData!= nil?contact.imageData:@"",
                                            @"number" : phoneNumber
                                            };
-                    [arrContacts addObject:dict];
-                    [tblvContacts reloadData];
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [arrContacts addObject:dict];
+                      [tblvContacts reloadData];
+                    });
+                    
+                  
                     [SVProgressHUD dismiss];
                 }
             }
@@ -320,7 +340,14 @@ NSString *AppURL = @"https://itunes.apple.com/us/app/wink-free-dating-ios-app/id
     ProfileLikeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ContactCell"];
     NSDictionary *dict = arrContacts[indexPath.row];
     
-    [cell setContactData:dict];
+    if((dict != nil) && [dict isKindOfClass:[NSDictionary class]])
+    {
+        [cell setContactData:dict];
+
+    }
+//    cell.selectionStyle = UITableViewCellSelectionStyleNone
+
+    
     
     return cell;
 }
@@ -370,5 +397,32 @@ NSString *AppURL = @"https://itunes.apple.com/us/app/wink-free-dating-ios-app/id
              [self showAlertWithMessage:response.error.localizedDescription];
          }
      }];
+}
+
+-(void)permission
+{
+    // Request authorization to Address Book
+    ABAddressBookRef addressBookRef = ABAddressBookCreateWithOptions(NULL, NULL);
+    
+    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
+        ABAddressBookRequestAccessWithCompletion(addressBookRef, ^(bool granted, CFErrorRef error) {
+            if (granted) {
+                // First time access has been granted, add the contact
+                [self getContacts];
+            } else {
+                // User denied access
+                // Display an alert telling user the contact could not be added
+            }
+        });
+    }
+    else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
+        [self getContacts];
+
+        // The user has previously given access, add the contact
+    }
+    else {
+        // The user has previously denied access
+        // Send an alert telling user to change privacy setting in settings app
+    }
 }
 @end

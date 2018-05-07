@@ -43,6 +43,7 @@
         [self.contentView addSubview:_timestampLabel];
         
         messageBackgroundView = [[UIImageView alloc] initWithFrame:self.textLabel.frame];
+            
         [self.contentView addSubview:messageBackgroundView];
         
         _messageImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.5,0.5,1,1)];
@@ -145,26 +146,41 @@
         self.AvatarImageView.frame=CGRectMake( self.frame.size.width-55,10+TOP_MARGIN, 50, 50);
          _messageImageView.image=[UIImage imageNamed:@"scene"];
     }
-    _messageImageView.frame=CGRectMake(0.5,0.5, 139,  139);
+    
+    _messageImageView.frame=CGRectMake(0.5,0.5, 139,139);
+    
+    
+    //ana : code for Image display
+    NSURL *fromProfURL;
+    NSString *lastComponent;
+    NSURL *url = [NSURL URLWithString:_modelClass.chat_Thumburl];
+    if(url != nil && url != NULL && (url.absoluteString.length != 0))
+    {
+        lastComponent = [url lastPathComponent];
+        fromProfURL = [WinkWebservice URLForChatImages:lastComponent];
+    }
+    
+    [_messageImageView sd_setImageWithURL:fromProfURL placeholderImage:[UIImage imageNamed:@"img_defaultthumbnail"] options:SDWebImageRetryFailed];
+    
     
 }
-
-- (void)drawRect:(CGRect)rect {
-    [super drawRect:rect];
-    
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1].CGColor);
-    
-    CGContextSetLineWidth(context, 1.0);
-    CGContextMoveToPoint(context, 0, 21); //start at this point
-    CGContextAddLineToPoint(context, (self.bounds.size.width - 120) / 2, 21); //draw to this point
-    
-    CGContextMoveToPoint(context, self.bounds.size.width, 21); //start at this point
-    CGContextAddLineToPoint(context, self.bounds.size.width - (self.bounds.size.width - 120) / 2, 21); //draw to this point
-    
-    CGContextStrokePath(context);
-    
-}
+//
+//- (void)drawRect:(CGRect)rect {
+//    [super drawRect:rect];
+//
+//    CGContextRef context = UIGraphicsGetCurrentContext();
+//    CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1].CGColor);
+//
+//    CGContextSetLineWidth(context, 1.0);
+//    CGContextMoveToPoint(context, 0, 21); //start at this point
+//    CGContextAddLineToPoint(context, (self.bounds.size.width - 120) / 2, 21); //draw to this point
+//
+//    CGContextMoveToPoint(context, self.bounds.size.width, 21); //start at this point
+//    CGContextAddLineToPoint(context, self.bounds.size.width - (self.bounds.size.width - 120) / 2, 21); //draw to this point
+//
+//    CGContextStrokePath(context);
+//
+//}
 
 
 

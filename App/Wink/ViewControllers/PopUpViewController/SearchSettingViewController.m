@@ -529,33 +529,35 @@
         for (int i = 0; i < arrDict.count; i++) {
             
             NSDictionary *dict = [arrDict.allValues objectAtIndex:i];
-            
-            if([dict.allValues containsObject:[NSString stringWithFormat:@"%d",people.tag]])
-                
+            if([dict isKindOfClass:[NSDictionary class]])
             {
-                
-                NSLog(@"YES");
-                
-                matchDict = dict;
-                
-                NSLog(@"dict %@",dict);
-                
-                
-                
-                if(([dict objectForKey:@"fullname"] != [NSNull null]))
+                if([dict.allValues containsObject:[NSString stringWithFormat:@"%d",people.tag]])
                     
-                    fvc.tempName = [dict valueForKey:@"fullname"];
-                
-                
-                
-                if(([dict objectForKey:@"login"] != [NSNull null]))
+                {
                     
-                    fvc.tempUserName = [dict valueForKey:@"login"];
-                
-                fvc.tempImgProfile = people.imageView.image;
-                
-                break;
-                
+                    NSLog(@"YES");
+                    
+                    matchDict = dict;
+                    
+                    NSLog(@"dict %@",dict);
+                    
+                    
+                    
+                    if(([dict objectForKey:@"fullname"] != [NSNull null]))
+                        
+                        fvc.tempName = [dict valueForKey:@"fullname"];
+                    
+                    
+                    
+                    if(([dict objectForKey:@"login"] != [NSNull null]))
+                        
+                        fvc.tempUserName = [dict valueForKey:@"login"];
+                    
+                    fvc.tempImgProfile = people.imageView.image;
+                    
+                    break;
+                    
+                }
             }
             
         }

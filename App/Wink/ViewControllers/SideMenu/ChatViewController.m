@@ -10,10 +10,11 @@
 #import "TPKeyboardAvoidingTableView.h"
 
 
-@interface ChatViewController ()<UITableViewDelegate, UITableViewDataSource,TextCellDelegate,MediaCellDelegate,AGEmojiKeyboardViewDelegate,AGEmojiKeyboardViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface ChatViewController ()<UITableViewDelegate, UITableViewDataSource,TextCellDelegate,MediaCellDelegate,AGEmojiKeyboardViewDelegate,AGEmojiKeyboardViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITextFieldDelegate>
 {
     UITapGestureRecognizer *img_Left,*img_Right;
     UIRefreshControl *refreshController;
+    BOOL isSendMsg;
 }
 
 @property (weak, nonatomic) IBOutlet UILabel *lblWithUserName;
@@ -61,7 +62,10 @@
                                              selector:@selector(receiveNotification:)
                                                  name:@"refreshChatTable"
                                                object:nil];
+    _txtchat.delegate = self;
     
+    _txtchat.autocorrectionType = UITextAutocorrectionTypeYes;
+
     
 }
 -(void)viewWillAppear:(BOOL)animated
@@ -72,13 +76,19 @@
     self.tblvChat.dataSource = self;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillAppear:)
-                                                 name:UIKeyboardWillShowNotification
-                                               object:nil];
+    selector:@selector(keyboardWillAppear:)
+    name:UIKeyboardWillShowNotification
+    object:nil];
+    
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillDisappear:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:nil];
+    selector:@selector(keyboardWillDisappear:)
+    name:UIKeyboardWillHideNotification
+     object:nil];
+    
+    
+//    self.lbl
+    
 }
 -(void)viewWillDisappear:(BOOL)animated
 {
@@ -139,6 +149,16 @@
 
 - (void)keyboardWillAppear:(NSNotification *)notification
 {
+    
+    NSLog(@"SELF HEIGHT %f",self.view.frame.size.height);
+    NSLog(@"SELF HEIGHT %f",self.view.bounds.size.height);
+    NSLog(@"SELF HEIGHT %f",[UIScreen mainScreen].bounds.size.height);
+
+    
+    
+    UIEdgeInsets contentInsets;
+
+    
 //    NSDictionary *userInfo = [notification userInfo];
 //    CGSize keyboardSize = [[userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
 //
@@ -151,16 +171,49 @@
 //    [vwTextInput setFrame:messageFrame];
     
     NSDictionary *userInfo = [notification userInfo];
-    CGSize keyboardSize = [[userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    CGSize keyboardSize = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+//    NSValue* keyboardFrameBegin = [userInfo valueForKey:UIKeyboardFrameEndUserInfoKey];
+//    CGSize kbSize = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+
     
+
     CGRect messageFrame = vwTextInput.frame;
     messageFrame.origin.y -= keyboardSize.height;
     
-    CGRect rect = CGRectMake(0, [UIScreen mainScreen].bounds.size.height -(keyboardSize.height + vwTextInput.frame.size.height ), [UIScreen mainScreen].bounds.size.width, vwTextInput.frame.size.height);
+    CGRect rect ;
+    if(_txtchat.autocorrectionType == UITextAutocorrectionTypeYes)
+    {
+        rect = CGRectMake(0, self.view.bounds.size.height -(keyboardSize.height + vwTextInput.frame.size.height), [UIScreen mainScreen].bounds.size.width, vwTextInput.frame.size.height);
+    }
+    else
+    {
+        rect = CGRectMake(0, self.view.bounds.size.height -(keyboardSize.height + vwTextInput.frame.size.height), [UIScreen mainScreen].bounds.size.width, vwTextInput.frame.size.height);
+    }
+    
+    
     
     [vwTextInput setFrame:rect];
 
+
+    if (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) {
+        contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.height), 0.0);
+    } else {
+        contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.width), 0.0);
+    }
     
+    
+    self.tblvChat.contentInset = contentInsets;
+    self.tblvChat.scrollIndicatorInsets = contentInsets;
+    
+    NSArray *visilble = [tblvChat indexPathsForVisibleRows];
+    
+    if(visilble.count > 0)
+    {
+        NSIndexPath *path = [visilble objectAtIndex:visilble.count - 1];
+        [self.tblvChat scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionTop animated:YES];
+
+    }
+  
 }
 - (void)keyboardWillDisappear:(NSNotification *)notification
 {
@@ -176,6 +229,11 @@
     CGRect messageFrame = vwTextInput.frame;
     messageFrame.origin.y += keyboardSize.height;
     [vwTextInput setFrame:messageFrame];
+    
+    CGPoint scrollPt = CGPointMake(0, 0);
+    self.tblvChat.contentInset = UIEdgeInsetsZero;
+    self.tblvChat.scrollIndicatorInsets = UIEdgeInsetsZero;//    [tblvChat setContentOffset:scrollPt animated:YES];
+    
 }
 
 
@@ -207,6 +265,12 @@
              {
                  NSDictionary *dict = arrMessages[i];
                  
+//                 if(isSendMsg)
+//                 {
+//                     dict = arrMessages[0];
+//                 }
+                 
+                 
                  if([WinkGlobalObject.user.ID isEqualToString:dict[@"fromUserId"]])
                  {
                      if(![dict[@"imgUrl"] isEqualToString:@""])
@@ -217,6 +281,16 @@
                      {
                          [self adddMediaBubbledata:kTextByme mediaPath:dict[@"message"] mtime:dict[@"timeAgo"] thumb:@"" downloadstatus:@"" sendingStatus:kSent msg_ID:dict[@"id"]avtarImage:dict[@"fromUserPhotoUrl"]];
                      }
+                     
+//                     if(isSendMsg)
+//                     {
+//                         [tblvChat reloadData];
+//                         [self scrollTableview];
+//                         isSendMsg = false;
+//                         return ;
+//                         
+//                     }
+//                     
                      
                  }
                  else
@@ -241,6 +315,14 @@
          {
              [self showAlertWithMessage:response.error.localizedDescription];
          }
+         
+         
+//         CGPoint contentOffset = self.tblvChat.contentOffset;
+//         [self.tblvChat reloadData];
+//         [self.tblvChat layoutIfNeeded];
+//         [self.tblvChat setContentOffset:contentOffset];
+         
+         
          [tblvChat reloadData];
          [self scrollTableview];
      }];
@@ -263,6 +345,8 @@
 }
 - (IBAction)btnSendTap:(id)sender
 {
+    
+    isSendMsg = true;
     if(selectedChatImage != nil)
     {
         [SVProgressHUD show];
@@ -284,7 +368,7 @@
 }
 -(void)sendNewMessage
 {
-    [self.txtchat resignFirstResponder];
+//    [self.txtchat resignFirstResponder];
     
     NSString *str = [_txtchat.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
@@ -353,6 +437,7 @@
                      vwImageView.hidden = true;
                      selectedChatImage = nil;
                      imgvImage.image = nil;
+            
                      [self getChatMessages];
         });
                  
@@ -434,7 +519,7 @@
     if(item > 0)
     {
         NSIndexPath *lastIndexPath = [NSIndexPath indexPathForItem:item inSection:0];
-        [tblvChat scrollToRowAtIndexPath:lastIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        [tblvChat scrollToRowAtIndexPath:lastIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
     }
     
 }
@@ -458,12 +543,18 @@
     feed_data=[arrMesaagesList objectAtIndex:indexPath.row];
     
     if ([feed_data.chat_media_type isEqualToString:kImagebyme]||[feed_data.chat_media_type isEqualToString:kImagebyOther])  return 180;
+
     
-    CGSize labelSize =[feed_data.chat_message boundingRectWithSize:CGSizeMake(226.0f, MAXFLOAT)
-                                                           options:NSStringDrawingUsesLineFragmentOrigin
-                                                        attributes:@{ NSFontAttributeName:[UIFont systemFontOfSize:17.0f] }
-                                                           context:nil].size;
-    return labelSize.height + 30 + TOP_MARGIN;
+    CGFloat height2 = [self heightForText:feed_data.chat_message font:[UIFont systemFontOfSize:14.0f]
+        withinWidth:[UIScreen mainScreen].bounds.size.width - 120];
+    
+    return height2 + 30 + TOP_MARGIN;
+    
+//    CGSize labelSize =[feed_data.chat_message boundingRectWithSize:CGSizeMake(226.0f, MAXFLOAT)
+//                                                           options:NSStringDrawingUsesLineFragmentOrigin
+//                                                        attributes:@{ NSFontAttributeName:[UIFont systemFontOfSize:17.0f] }
+//                                                           context:nil].size;
+//    return labelSize.height + 30 + TOP_MARGIN;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -481,8 +572,10 @@
         {
             cell = [[SPHTextBubbleCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:L_CellIdentifier];
         }
+    
         
         cell.bubbletype=([feed_data.chat_media_type isEqualToString:kTextByme])?@"RIGHT":@"LEFT";
+        
         
         NSString *goodMsg = [self decodeEmojis:feed_data.chat_message];
         
@@ -515,17 +608,18 @@
     }
     
     SPHMediaBubbleCell *cell = (SPHMediaBubbleCell *) [tableView dequeueReusableCellWithIdentifier:R_CellIdentifier];
+    cell.modelClass = feed_data;
     if (cell == nil)
     {
         cell = [[SPHMediaBubbleCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:R_CellIdentifier];
     }
-    cell.messageImageView.backgroundColor= [UIColor clearColor];
+
     cell.bubbletype=([feed_data.chat_media_type isEqualToString:kImagebyme])?@"RIGHT":@"LEFT";
     cell.textLabel.text = feed_data.chat_message;
     cell.messageImageView.tag=indexPath.row;
     cell.CustomDelegate=self;
     cell.timestampLabel.text = feed_data.chat_date_time;
-   // cell.timestampLabel.textColor = (__bridge UIColor * _Nullable)([UIColor whiteColor].CGColor);
+    cell.timestampLabel.textColor = [UIColor blackColor];
     //[cell.messageImageView setImageWithURL:[NSURL URLWithString:feed_data.chat_Thumburl]];
     NSLog(@"%@",feed_data.chat_Thumburl);
     
@@ -552,35 +646,42 @@
         fromProfURL = [WinkWebservice URLForChatImages:lastComponent];
     }
     
-    cell.messageImageView.image = [UIImage imageNamed:@"img_defaultthumbnail"];
+    
+    return cell;
+//    cell.messageImageView.image = [UIImage imageNamed:@"img_defaultthumbnail"];
     NSLog(@"Purl:-%@",fromProfURL);
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        NSData *imgData = [NSData dataWithContentsOfURL:fromProfURL];
-        dispatch_async(dispatch_get_main_queue(), ^{ // 2
-            
-            if(imgData)
-            {
-                UIImage *img = [UIImage imageWithData:imgData];
-                if(img)
-                {
-                    [cell.messageImageView setImage:img];
-                }
-                else
-                {
-                    cell.messageImageView.image = [UIImage imageNamed:@"img_defaultthumbnail"];
-                    
-                    //NSLog(@" image url was %@ ",feed_data.chat_Thumburl);
-                }
-                
-            }
-            else
-            {
-                cell.messageImageView.image = [UIImage imageNamed:@"img_defaultthumbnail"];
-                //NSLog(@" image url was %@ ",feed_data.chat_Thumburl);
-            }
-            
-        });
-    });
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+//        NSData *imgData = [NSData dataWithContentsOfURL:fromProfURL];
+//        dispatch_async(dispatch_get_main_queue(), ^{ // 2
+//
+//            if(imgData)
+//            {
+//                UIImage *img = [UIImage imageWithData:imgData];
+//                if(img)
+//                {
+//                    [cell.messageImageView setImage:img];
+//                }
+//                else
+//                {
+//                    cell.messageImageView.image = [UIImage imageNamed:@"img_defaultthumbnail"];
+//
+//                    //NSLog(@" image url was %@ ",feed_data.chat_Thumburl);
+//                }
+//
+//            }
+//            else
+//            {
+//                cell.messageImageView.image = [UIImage imageNamed:@"img_defaultthumbnail"];
+//                //NSLog(@" image url was %@ ",feed_data.chat_Thumburl);
+//            }
+//
+//        });
+//    });
+    
+    CGRect frame = [tableView rectForRowAtIndexPath:indexPath];
+    NSLog(@"row height : %f", frame.size.height);
+    
+    
     //[cell.messageImageView setImageWithURL:fromProfURL];
     //NSData * imageData = [NSData dataWithContentsOfURL:fromProfURL];
     //UIImage * image = [UIImage imageWithData:imageData];
@@ -692,10 +793,10 @@
 
 -(void)mediaCellDidTapped:(SPHMediaBubbleCell *)mediaCell AndGesture:(UIGestureRecognizer*)tapGR;
 {
-    //NSIndexPath *indexPath = [NSIndexPath indexPathForRow:mediaCell.messageImageView.tag inSection:0];
-    // NSLog(@"Media cell Pressed  and IndexPath=%@",indexPath);
-    
-    //[mediaCell showMenu];
+//    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:mediaCell.messageImageView.tag inSection:0];
+//     NSLog(@"Media cell Pressed  and IndexPath=%@",indexPath);
+//
+//    [mediaCell showMenu];
 }
 
 -(void)mediaCellCopyPressed:(SPHMediaBubbleCell *)mediaCell
@@ -1029,5 +1130,36 @@
     //[arrMesaagesList addObject:feed_data];
 }
 
+
+#pragma mark:- Delegate method for chat
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [_txtchat resignFirstResponder];
+    return true;
+}
+- (CGFloat)heightOfCellWithIngredientLine:(NSString *)ingredientLine
+                       withSuperviewWidth:(CGFloat)superviewWidth
+{
+    CGFloat labelWidth                  = superviewWidth - 30.0f;
+    //    use the known label width with a maximum height of 100 points
+    CGSize labelContraints              = CGSizeMake(labelWidth, 100.0f);
+    
+    NSStringDrawingContext *context     = [[NSStringDrawingContext alloc] init];
+    
+    CGRect labelRect                    = [ingredientLine boundingRectWithSize:labelContraints
+                                                                       options:NSStringDrawingUsesLineFragmentOrigin
+                                                                    attributes:nil
+                                                                       context:context];
+    
+    //    return the calculated required height of the cell considering the label
+    return labelRect.size.height;
+}
+
+ -(CGFloat)heightForText:(NSString*)text font:(UIFont*)font withinWidth:(CGFloat)width {
+    CGSize size = [text sizeWithAttributes:@{NSFontAttributeName:font}];
+    CGFloat area = size.height * size.width;
+    CGFloat height = roundf(area / width);
+    return ceilf(height / font.lineHeight) * font.lineHeight;
+}
 
 @end

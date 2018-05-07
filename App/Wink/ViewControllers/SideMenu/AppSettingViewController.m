@@ -222,6 +222,9 @@
                 [self showAlertWithMessage:response.message];
                 isAllowMessage = !isAllowMessage;
             }
+            
+            [WinkGlobalObject.user saveInUserDefaults];
+
         }];
     }
     else
@@ -260,6 +263,9 @@
                  [self showAlertWithMessage:response.message];
                  isAllowComment = !isAllowComment;
              }
+             
+             [WinkGlobalObject.user saveInUserDefaults];
+
          }];
     }
     else
